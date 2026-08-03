@@ -1,6 +1,5 @@
 /* =========================================================
    EnglishWords — صفحة اختيار المستوى والتصنيف
-   تصميم حديث + مناسب للجوال
 ========================================================= */
 
 * {
@@ -14,9 +13,13 @@ html {
 body {
     margin: 0;
     min-height: 100vh;
+
     background: #f8f9fc;
     color: #171827;
+
     font-family: Arial, Tahoma, sans-serif;
+
+    direction: rtl;
 }
 
 button {
@@ -32,19 +35,21 @@ button {
 .topbar {
     width: 100%;
     max-width: 900px;
-    margin: 0 auto;
 
     min-height: 70px;
+
+    margin: 0 auto;
     padding: 12px 20px;
 
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     gap: 12px;
 
-    background: rgba(255, 255, 255, .97);
+    background: rgba(255,255,255,.97);
 
-    border-bottom: 1px solid #eeeef5;
+    border-bottom: 1px solid #eeeeF5;
 
     position: relative;
     z-index: 10;
@@ -65,7 +70,8 @@ button {
 
     cursor: pointer;
 
-    box-shadow: 0 3px 12px rgba(40, 35, 100, .05);
+    box-shadow:
+        0 3px 12px rgba(40,35,100,.05);
 
     transition: .18s ease;
 }
@@ -87,6 +93,18 @@ button {
     font-weight: 800;
 }
 
+.title-icon {
+    display: inline-block;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    background: transparent !important;
+    border: none !important;
+
+    font-size: 22px !important;
+}
+
 
 /* =========================================================
    الحاوية
@@ -103,7 +121,7 @@ button {
 
 
 /* =========================================================
-   البانر
+   المقدمة
 ========================================================= */
 
 .intro {
@@ -115,7 +133,7 @@ button {
 
     padding: 25px 28px;
 
-    margin-bottom: 22px;
+    margin-bottom: 32px;
 
     display: flex;
     align-items: center;
@@ -127,7 +145,7 @@ button {
     background:
         radial-gradient(
             circle at 92% 15%,
-            rgba(255, 255, 255, .13) 0 75px,
+            rgba(255,255,255,.13) 0 75px,
             transparent 76px
         ),
         linear-gradient(
@@ -138,7 +156,7 @@ button {
         );
 
     box-shadow:
-        0 12px 30px rgba(96, 78, 226, .20);
+        0 12px 30px rgba(96,78,226,.20);
 }
 
 .intro::after {
@@ -157,18 +175,19 @@ button {
 
     filter:
         drop-shadow(
-            0 8px 7px rgba(0, 0, 0, .15)
+            0 8px 7px rgba(0,0,0,.15)
         );
 }
 
-.intro > div {
+.intro-content {
     position: relative;
+
     z-index: 2;
 
     max-width: 560px;
 }
 
-.intro span {
+.intro-label {
     display: inline-block;
 
     padding: 7px 13px;
@@ -177,9 +196,11 @@ button {
 
     border-radius: 18px;
 
-    background: rgba(255, 255, 255, .14);
+    background: rgba(255,255,255,.14);
 
-    border: 1px solid rgba(255, 255, 255, .12);
+    border: 1px solid rgba(255,255,255,.12);
+
+    color: white;
 
     font-size: 13px;
     font-weight: bold;
@@ -188,9 +209,27 @@ button {
 .intro h1 {
     margin: 0 0 7px;
 
+    color: white;
+
     font-size: 30px;
 
-    line-height: 1.25;
+    line-height: 1.3;
+}
+
+.intro h1 span {
+    display: inline;
+
+    padding: 0;
+    margin: 0;
+
+    background: transparent;
+
+    border: none;
+
+    color: white;
+
+    font-size: inherit;
+    font-weight: inherit;
 }
 
 .intro p {
@@ -198,11 +237,43 @@ button {
 
     max-width: 470px;
 
-    color: rgba(255, 255, 255, .92);
+    color: rgba(255,255,255,.92);
 
     font-size: 13px;
 
     line-height: 1.7;
+}
+
+.intro-decoration {
+    position: absolute;
+
+    inset: 0;
+
+    pointer-events: none;
+}
+
+.floating-book {
+    display: none;
+}
+
+.floating-star {
+    position: absolute;
+
+    color: rgba(255,255,255,.5);
+
+    font-size: 25px;
+}
+
+.star-one {
+    top: 20px;
+    left: 170px;
+}
+
+.star-two {
+    bottom: 25px;
+    right: 80px;
+
+    font-size: 18px;
 }
 
 
@@ -211,39 +282,45 @@ button {
 ========================================================= */
 
 .section-heading {
-    margin: 25px 3px 12px;
+    margin: 0 3px 12px;
 }
 
 .section-heading > div {
     display: flex;
+
     align-items: center;
+
     gap: 12px;
 }
 
 .section-number {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
 
     flex-shrink: 0;
 
     display: flex;
+
     align-items: center;
     justify-content: center;
 
-    border-radius: 12px;
+    border-radius: 11px;
 
     background: #eeeaff;
 
-    color: #6251e5;
+    color: #6554e8;
 
-    font-size: 13px;
+    font-size: 12px;
+
     font-weight: 800;
 }
 
 .section-heading h2 {
     margin: 0 0 3px;
 
-    font-size: 19px;
+    color: #202031;
+
+    font-size: 20px;
 
     font-weight: 800;
 }
@@ -256,6 +333,10 @@ button {
     font-size: 11px;
 }
 
+.category-heading {
+    margin-top: 30px;
+}
+
 
 /* =========================================================
    المستويات
@@ -264,13 +345,15 @@ button {
 .levels {
     display: grid;
 
-    gap: 9px;
+    gap: 10px;
 }
 
 .level-card {
     width: 100%;
 
-    min-height: 78px;
+    min-height: 82px;
+
+    padding: 10px 14px;
 
     display: flex;
 
@@ -278,11 +361,9 @@ button {
 
     gap: 15px;
 
-    padding: 9px 12px;
-
     border: 1px solid #e9e9f1;
 
-    border-radius: 17px;
+    border-radius: 18px;
 
     background: white;
 
@@ -291,7 +372,7 @@ button {
     cursor: pointer;
 
     box-shadow:
-        0 3px 12px rgba(25, 25, 60, .045);
+        0 3px 12px rgba(25,25,60,.045);
 
     transition:
         transform .18s ease,
@@ -304,7 +385,7 @@ button {
     transform: translateY(-2px);
 
     box-shadow:
-        0 7px 18px rgba(50, 45, 100, .08);
+        0 7px 18px rgba(50,45,100,.08);
 }
 
 .level-card:active {
@@ -312,11 +393,13 @@ button {
 }
 
 
-/* مربع A1 / A2 / B1 */
+/* =========================================================
+   مربع A1 / A2 / B1
+========================================================= */
 
-.level-card .level-badge {
-    width: 70px;
-    min-width: 70px;
+.level-badge {
+    width: 65px;
+    min-width: 65px;
 
     height: 55px;
 
@@ -336,12 +419,12 @@ button {
             #5846db
         );
 
-    font-size: 22px;
+    font-size: 21px;
 
     font-weight: 800;
 
     box-shadow:
-        0 5px 12px rgba(94, 76, 225, .16);
+        0 5px 12px rgba(94,76,225,.16);
 }
 
 .level-card:nth-child(2) .level-badge {
@@ -363,34 +446,44 @@ button {
 }
 
 
-/* معلومات المستوى */
+/* =========================================================
+   معلومات المستوى
+========================================================= */
 
-.level-card .level-content {
+.level-content {
     flex: 1;
+
+    min-width: 0;
 }
 
-.level-card h3 {
-    margin: 0 0 3px;
+.level-content h3 {
+    margin: 0 0 4px;
+
+    color: #202031;
 
     font-size: 16px;
+
+    font-weight: 800;
 }
 
-.level-card p {
+.level-content p {
     margin: 0;
 
-    color: #7d7e8e;
+    color: #858596;
 
     font-size: 11px;
 
-    line-height: 1.4;
+    line-height: 1.5;
 }
 
 
-/* دائرة الاختيار */
+/* =========================================================
+   دائرة الاختيار
+========================================================= */
 
-.level-card .select-circle {
-    width: 25px;
-    height: 25px;
+.select-circle {
+    width: 28px;
+    height: 28px;
 
     flex-shrink: 0;
 
@@ -399,7 +492,7 @@ button {
     align-items: center;
     justify-content: center;
 
-    border: 2px solid #d9d9e5;
+    border: 2px solid #dedee8;
 
     border-radius: 50%;
 
@@ -408,10 +501,9 @@ button {
     font-size: 13px;
 
     font-weight: bold;
+
+    transition: .2s ease;
 }
-
-
-/* المستوى المحدد */
 
 .level-card.selected {
     border-color: #6a58eb;
@@ -419,7 +511,7 @@ button {
     background: #faf9ff;
 
     box-shadow:
-        0 6px 18px rgba(98, 80, 230, .11);
+        0 6px 18px rgba(98,80,230,.11);
 }
 
 .level-card.selected .select-circle {
@@ -436,24 +528,16 @@ button {
 ========================================================= */
 
 .categories {
-    width: 100%;
-
     display: grid;
 
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns:
+        repeat(3, 1fr);
 
     gap: 10px;
-
-    margin-top: 5px;
 }
-
-
-/* بطاقة التصنيف */
 
 .category-card {
     position: relative;
-
-    width: 100%;
 
     min-height: 125px;
 
@@ -464,7 +548,6 @@ button {
     flex-direction: column;
 
     align-items: center;
-
     justify-content: center;
 
     border: 1px solid #e9e9f1;
@@ -476,22 +559,20 @@ button {
     cursor: pointer;
 
     box-shadow:
-        0 3px 12px rgba(25, 25, 60, .045);
+        0 3px 12px rgba(25,25,60,.045);
 
     transition:
         transform .18s ease,
         box-shadow .18s ease,
         border-color .18s ease,
         background .18s ease;
-
-    text-align: center;
 }
 
 .category-card:hover {
     transform: translateY(-2px);
 
     box-shadow:
-        0 8px 18px rgba(40, 35, 90, .08);
+        0 8px 18px rgba(40,35,90,.08);
 }
 
 .category-card:active {
@@ -503,59 +584,52 @@ button {
    أيقونة التصنيف
 ========================================================= */
 
-.category-card .category-icon {
+.category-icon {
     width: 52px;
     height: 52px;
-
-    flex-shrink: 0;
 
     display: flex;
 
     align-items: center;
     justify-content: center;
 
-    margin-bottom: 8px;
+    margin-bottom: 7px;
 
     border-radius: 15px;
 
-    font-size: 29px;
-
-    line-height: 1;
+    font-size: 28px;
 }
 
-
-/* ألوان التصنيفات */
-
-.category-card .home-icon {
+.home-icon {
     background: #e8f9f1;
 }
 
-.category-card .food-icon {
+.food-icon {
     background: #fff1d8;
 }
 
-.category-card .cars-icon {
+.cars-icon {
     background: #e4f0ff;
 }
 
-.category-card .clothes-icon {
+.clothes-icon {
     background: #ffe5ea;
 }
 
-.category-card .family-icon {
+.family-icon {
     background: #eee8ff;
 }
 
-.category-card .nature-icon {
+.nature-icon {
     background: #e4f7d9;
 }
 
-.category-card .animals-icon {
-    background: #fff0d9;
+.animals-icon {
+    background: #fff0df;
 }
 
-.category-card .colors-icon {
-    background: #f2e8ff;
+.colors-icon {
+    background: #f0eaff;
 }
 
 
@@ -563,22 +637,14 @@ button {
    معلومات التصنيف
 ========================================================= */
 
-.category-card .category-info {
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 2px;
+.category-info {
+    text-align: center;
 }
 
-.category-card .category-info strong {
+.category-info strong {
     display: block;
 
-    margin: 0;
+    margin-bottom: 3px;
 
     color: #202031;
 
@@ -587,44 +653,10 @@ button {
     font-weight: 800;
 }
 
-.category-card .category-info small {
-    display: block;
-
+.category-info small {
     color: #858596;
 
     font-size: 10px;
-}
-
-
-/* =========================================================
-   علامة الاختيار
-========================================================= */
-
-.category-card .category-check {
-    position: absolute;
-
-    top: 7px;
-    right: 7px;
-
-    width: 22px;
-    height: 22px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    border: 1px solid #dedee8;
-
-    border-radius: 50%;
-
-    background: white;
-
-    color: transparent;
-
-    font-size: 11px;
-
-    font-weight: bold;
 }
 
 
@@ -638,12 +670,39 @@ button {
     background: #faf9ff;
 
     box-shadow:
-        0 7px 18px rgba(99, 82, 229, .12);
+        0 7px 18px rgba(99,82,229,.12);
+}
+
+.category-card.selected .category-icon {
+    transform: scale(1.04);
+}
+
+.category-check {
+    position: absolute;
+
+    top: 7px;
+    right: 7px;
+
+    width: 22px;
+    height: 22px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #f0f0f5;
+
+    color: transparent;
+
+    font-size: 11px;
+
+    font-weight: bold;
 }
 
 .category-card.selected .category-check {
-    border-color: #6755e8;
-
     background: #6755e8;
 
     color: white;
@@ -651,11 +710,11 @@ button {
 
 
 /* =========================================================
-   زر ابدأ التعلم
+   منطقة البداية
 ========================================================= */
 
 .start-area {
-    margin-top: 20px;
+    margin-top: 28px;
 
     text-align: center;
 }
@@ -665,13 +724,13 @@ button {
 
     color: #858596;
 
-    font-size: 12px;
+    font-size: 11px;
 }
 
 .start-btn {
     width: 100%;
 
-    min-height: 54px;
+    min-height: 56px;
 
     border: none;
 
@@ -693,7 +752,7 @@ button {
     cursor: pointer;
 
     box-shadow:
-        0 8px 20px rgba(92, 73, 225, .20);
+        0 8px 20px rgba(92,73,225,.20);
 
     transition:
         transform .18s ease,
@@ -705,7 +764,7 @@ button {
     transform: translateY(-2px);
 
     box-shadow:
-        0 11px 24px rgba(92, 73, 225, .25);
+        0 11px 24px rgba(92,73,225,.25);
 }
 
 .start-btn:not(:disabled):active {
@@ -720,6 +779,10 @@ button {
     box-shadow: none;
 }
 
+.start-arrow {
+    margin-right: 7px;
+}
+
 
 /* =========================================================
    الجوال
@@ -731,6 +794,7 @@ button {
         overflow-x: hidden;
     }
 
+
     .topbar {
         min-height: 60px;
 
@@ -739,9 +803,16 @@ button {
         gap: 8px;
     }
 
+
     .page-title {
         font-size: 18px;
     }
+
+
+    .title-icon {
+        font-size: 18px !important;
+    }
+
 
     .back-btn {
         padding: 8px 11px;
@@ -764,12 +835,13 @@ button {
 
         padding: 16px 18px;
 
-        margin-bottom: 12px;
+        margin-bottom: 18px;
 
         border-radius: 20px;
     }
 
-    .intro span {
+
+    .intro-label {
         padding: 5px 10px;
 
         margin-bottom: 5px;
@@ -777,11 +849,13 @@ button {
         font-size: 10px;
     }
 
+
     .intro h1 {
         margin-bottom: 4px;
 
         font-size: 23px;
     }
+
 
     .intro p {
         max-width: 240px;
@@ -790,6 +864,7 @@ button {
 
         line-height: 1.55;
     }
+
 
     .intro::after {
         left: 4px;
@@ -803,28 +878,37 @@ button {
     /* عناوين الأقسام */
 
     .section-heading {
-        margin: 16px 2px 8px;
+        margin-bottom: 9px;
     }
+
 
     .section-heading > div {
-        gap: 8px;
+        gap: 9px;
     }
 
+
     .section-number {
-        width: 31px;
-        height: 31px;
+        width: 30px;
+        height: 30px;
 
         border-radius: 9px;
 
         font-size: 10px;
     }
 
+
     .section-heading h2 {
         font-size: 16px;
     }
 
+
     .section-heading p {
         font-size: 9px;
+    }
+
+
+    .category-heading {
+        margin-top: 20px;
     }
 
 
@@ -834,112 +918,119 @@ button {
         gap: 6px;
     }
 
-    .level-card {
-        min-height: 61px;
 
-        padding: 6px 8px;
+    .level-card {
+        min-height: 63px;
+
+        padding: 7px 9px;
 
         gap: 9px;
 
         border-radius: 14px;
     }
 
-    .level-card .level-badge {
-        width: 55px;
-        min-width: 55px;
+
+    .level-badge {
+        width: 52px;
+        min-width: 52px;
 
         height: 43px;
 
         border-radius: 11px;
 
-        font-size: 18px;
+        font-size: 17px;
     }
 
-    .level-card h3 {
-        margin-bottom: 1px;
+
+    .level-content h3 {
+        margin-bottom: 2px;
 
         font-size: 13px;
     }
 
-    .level-card p {
+
+    .level-content p {
         font-size: 9px;
 
-        line-height: 1.25;
-    }
-
-    .level-card .select-circle {
-        width: 21px;
-        height: 21px;
-
-        font-size: 11px;
+        line-height: 1.3;
     }
 
 
-    /* =====================================================
-       التصنيفات في الجوال
-    ===================================================== */
+    .select-circle {
+        width: 22px;
+        height: 22px;
+
+        font-size: 10px;
+    }
+
+
+    /* التصنيفات */
 
     .categories {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns:
+            repeat(3, 1fr);
 
         gap: 6px;
-
-        margin-top: 4px;
     }
 
-    .category-card {
-        min-height: 94px;
 
-        padding: 6px 3px;
+    .category-card {
+        min-height: 91px;
+
+        padding: 7px 3px;
 
         border-radius: 14px;
     }
 
-    .category-card .category-icon {
-        width: 40px;
-        height: 40px;
 
-        margin-bottom: 5px;
+    .category-icon {
+        width: 39px;
+        height: 39px;
+
+        margin-bottom: 4px;
 
         border-radius: 11px;
 
-        font-size: 23px;
+        font-size: 22px;
     }
 
-    .category-card .category-info {
-        gap: 1px;
-    }
 
-    .category-card .category-info strong {
+    .category-info strong {
         font-size: 11px;
+
+        margin-bottom: 1px;
     }
 
-    .category-card .category-info small {
+
+    .category-info small {
         font-size: 8px;
     }
 
-    .category-card .category-check {
+
+    .category-check {
         top: 4px;
         right: 4px;
 
         width: 19px;
         height: 19px;
 
-        font-size: 10px;
+        font-size: 9px;
     }
 
 
     /* زر البداية */
 
     .start-area {
-        margin-top: 12px;
+        margin-top: 16px;
     }
+
 
     .selection-message {
-        margin-bottom: 7px;
+        font-size: 9px;
 
-        font-size: 10px;
+        margin-bottom: 7px;
     }
+
 
     .start-btn {
         min-height: 49px;
@@ -953,7 +1044,7 @@ button {
 
 
 /* =========================================================
-   الجوالات الصغيرة جدًا
+   جوالات صغيرة جدًا
 ========================================================= */
 
 @media (max-width: 380px) {
@@ -964,9 +1055,11 @@ button {
         padding: 7px 10px;
     }
 
+
     .page-title {
         font-size: 16px;
     }
+
 
     .back-btn {
         padding: 7px 9px;
@@ -974,9 +1067,11 @@ button {
         font-size: 11px;
     }
 
+
     .container {
         padding: 10px 10px 65px;
     }
+
 
     .intro {
         min-height: 115px;
@@ -984,9 +1079,11 @@ button {
         padding: 14px 15px;
     }
 
+
     .intro h1 {
         font-size: 21px;
     }
+
 
     .intro p {
         max-width: 215px;
@@ -994,18 +1091,16 @@ button {
         font-size: 9px;
     }
 
+
     .intro::after {
         font-size: 43px;
     }
 
 
-    .section-heading {
-        margin-top: 12px;
-    }
-
     .section-heading h2 {
         font-size: 15px;
     }
+
 
     .section-heading p {
         font-size: 8px;
@@ -1016,59 +1111,47 @@ button {
         min-height: 57px;
     }
 
-    .level-card .level-badge {
-        width: 51px;
-        min-width: 51px;
 
-        height: 40px;
+    .level-badge {
+        width: 48px;
+        min-width: 48px;
 
-        font-size: 17px;
+        height: 39px;
+
+        font-size: 16px;
     }
 
-    .level-card h3 {
+
+    .level-content h3 {
         font-size: 12px;
     }
 
-    .level-card p {
+
+    .level-content p {
         font-size: 8px;
     }
 
 
-    /* التصنيفات الصغيرة */
-
-    .categories {
-        gap: 5px;
-    }
-
     .category-card {
         min-height: 84px;
-
-        padding: 5px 2px;
     }
 
-    .category-card .category-icon {
+
+    .category-icon {
         width: 36px;
         height: 36px;
 
-        font-size: 21px;
-
-        margin-bottom: 4px;
+        font-size: 20px;
     }
 
-    .category-card .category-info strong {
+
+    .category-info strong {
         font-size: 10px;
     }
 
-    .category-card .category-info small {
+
+    .category-info small {
         font-size: 7px;
-    }
-
-    .category-card .category-check {
-        width: 18px;
-        height: 18px;
-
-        top: 3px;
-        right: 3px;
     }
 
 
@@ -1077,4 +1160,5 @@ button {
 
         font-size: 14px;
     }
+
 }
