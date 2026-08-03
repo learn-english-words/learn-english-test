@@ -5,17 +5,14 @@
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>تعلم الكلمات | EnglishWords</title>
 
     <link rel="stylesheet" href="learn.css">
 
 </head>
-
 
 <body>
 
@@ -28,15 +25,12 @@
 
     <button
         class="back-btn"
-        onclick="goHome()"
-    >
+        onclick="goHome()">
 
         <span>→</span>
-
         الرئيسية
 
     </button>
-
 
     <div class="page-title">
 
@@ -73,29 +67,18 @@
                 ✨ ابدأ رحلتك
             </div>
 
-
             <h1>
-
                 تعلم الإنجليزية
-
                 <br>
-
-                <span>
-                    بطريقة أسهل 🚀
-                </span>
-
+                <span>بطريقة أسهل 🚀</span>
             </h1>
 
-
             <p>
-
                 اختر مستواك أولًا، ثم اختر التصنيف
                 الذي تريد تعلم كلماته.
-
             </p>
 
         </div>
-
 
         <div class="intro-decoration">
 
@@ -121,132 +104,132 @@
          اختيار المستوى
     ========================================== -->
 
-    <div class="section-heading">
+    <section class="selection-section">
 
-        <div>
+        <div class="section-heading">
 
-            <span class="section-number">
-                01
-            </span>
+            <div class="heading-inner">
 
-            <div>
+                <span class="section-number">
+                    01
+                </span>
 
-                <h2>
-                    اختر مستواك
-                </h2>
+                <div>
 
-                <p>
-                    اختر المستوى المناسب لك
-                </p>
+                    <h2>
+                        اختر مستواك
+                    </h2>
+
+                    <p>
+                        اختر المستوى المناسب لك
+                    </p>
+
+                </div>
 
             </div>
 
         </div>
 
-    </div>
+
+        <section class="levels">
+
+
+            <!-- A1 -->
+
+            <button
+                type="button"
+                class="level-card"
+                data-level="A1"
+                onclick="selectLevel(this, 'A1')">
+
+                <div class="level-badge">
+                    A1
+                </div>
+
+                <div class="level-content">
+
+                    <h3>
+                        مبتدئ
+                    </h3>
+
+                    <p>
+                        كلمات إنجليزية أساسية وسهلة
+                    </p>
+
+                </div>
+
+                <div class="select-circle">
+                    ✓
+                </div>
+
+            </button>
 
 
 
-    <section class="levels">
+            <!-- A2 -->
 
+            <button
+                type="button"
+                class="level-card"
+                data-level="A2"
+                onclick="selectLevel(this, 'A2')">
 
-        <!-- A1 -->
+                <div class="level-badge">
+                    A2
+                </div>
 
-        <button
-            class="level-card"
-            onclick="selectLevel(this, 'A1')"
-        >
+                <div class="level-content">
 
-            <div class="level-badge">
-                A1
-            </div>
+                    <h3>
+                        متوسط
+                    </h3>
 
+                    <p>
+                        كلمات أكثر تنوعًا واستخدامًا
+                    </p>
 
-            <div class="level-content">
+                </div>
 
-                <h3>
-                    مبتدئ
-                </h3>
+                <div class="select-circle">
+                    ✓
+                </div>
 
-                <p>
-                    كلمات إنجليزية أساسية وسهلة
-                </p>
-
-            </div>
-
-
-            <div class="select-circle">
-                ✓
-            </div>
-
-        </button>
+            </button>
 
 
 
-        <!-- A2 -->
+            <!-- B1 -->
 
-        <button
-            class="level-card"
-            onclick="selectLevel(this, 'A2')"
-        >
+            <button
+                type="button"
+                class="level-card"
+                data-level="B1"
+                onclick="selectLevel(this, 'B1')">
 
-            <div class="level-badge">
-                A2
-            </div>
+                <div class="level-badge">
+                    B1
+                </div>
 
+                <div class="level-content">
 
-            <div class="level-content">
+                    <h3>
+                        متقدم
+                    </h3>
 
-                <h3>
-                    متوسط
-                </h3>
+                    <p>
+                        كلمات أصعب ومفيدة للمحادثة
+                    </p>
 
-                <p>
-                    كلمات أكثر تنوعًا واستخدامًا
-                </p>
+                </div>
 
-            </div>
+                <div class="select-circle">
+                    ✓
+                </div>
 
-
-            <div class="select-circle">
-                ✓
-            </div>
-
-        </button>
-
+            </button>
 
 
-        <!-- B1 -->
-
-        <button
-            class="level-card"
-            onclick="selectLevel(this, 'B1')"
-        >
-
-            <div class="level-badge">
-                B1
-            </div>
-
-
-            <div class="level-content">
-
-                <h3>
-                    متقدم
-                </h3>
-
-                <p>
-                    كلمات أصعب ومفيدة للمحادثة
-                </p>
-
-            </div>
-
-
-            <div class="select-circle">
-                ✓
-            </div>
-
-        </button>
-
+        </section>
 
     </section>
 
@@ -256,43 +239,72 @@
          اختيار التصنيف
     ========================================== -->
 
-    <div class="section-heading category-heading">
+    <section class="selection-section category-section">
 
-        <div>
+        <div class="section-heading">
 
-            <span class="section-number">
-                02
-            </span>
+            <div class="heading-inner">
 
-            <div>
+                <span class="section-number">
+                    02
+                </span>
 
-                <h2>
-                    اختر التصنيف
-                </h2>
+                <div>
 
-                <p>
-                    ماذا تريد أن تتعلم اليوم؟
-                </p>
+                    <h2>
+                        اختر التصنيف
+                    </h2>
+
+                    <p>
+                        ماذا تريد أن تتعلم اليوم؟
+                    </p>
+
+                </div>
 
             </div>
 
         </div>
 
-    </div>
+
+        <!--
+            سيتم تحميل التصنيفات من Supabase هنا
+        -->
+
+        <section
+            id="categoriesContainer"
+            class="categories">
+
+            <div class="loading-categories">
+
+                <div class="loading-spinner"></div>
+
+                <span>
+                    جاري تحميل التصنيفات...
+                </span>
+
+            </div>
+
+        </section>
 
 
+        <!-- رسالة الخطأ -->
 
-    <!-- ==========================================
-         التصنيفات
-         يتم إنشاؤها تلقائيًا من categories.js
-    ========================================== -->
+        <div
+            id="categoryError"
+            class="category-error"
+            hidden>
 
-    <section
-        class="categories"
-        id="categoriesContainer"
-    >
+            حدث خطأ أثناء تحميل التصنيفات.
 
-        <!-- التصنيفات تظهر هنا تلقائيًا -->
+            <button
+                type="button"
+                onclick="loadCategories()">
+
+                إعادة المحاولة
+
+            </button>
+
+        </div>
 
     </section>
 
@@ -306,8 +318,7 @@
 
         <div
             id="selectionMessage"
-            class="selection-message"
-        >
+            class="selection-message">
 
             اختر المستوى والتصنيف للبدء 👆
 
@@ -315,11 +326,11 @@
 
 
         <button
+            type="button"
             id="startBtn"
             class="start-btn"
             onclick="startLearning()"
-            disabled
-        >
+            disabled>
 
             <span>
                 ابدأ التعلم
@@ -346,17 +357,7 @@
 
 <script src="supabase.js"></script>
 
-<!-- التصنيفات -->
-
-<script src="categories.js"></script>
-
-<!-- كود صفحة التعلم -->
-
 <script src="learn.js"></script>
-
-<!-- الإشعارات -->
-
-<script src="notifications.js"></script>
 
 
 </body>
