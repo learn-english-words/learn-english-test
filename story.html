@@ -1,0 +1,1575 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Story - EnglishWords</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #f8f9fc;
+    color: #171827;
+    font-family: Arial, Tahoma, sans-serif;
+}
+
+button {
+    font-family: inherit;
+}
+
+.story-page {
+    width: 100%;
+    max-width: 650px;
+    min-height: 100vh;
+    margin: auto;
+    padding: 18px 16px 50px;
+}
+
+/* =========================
+   الهيدر
+========================= */
+
+.story-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.back-button {
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 3px 12px rgba(0,0,0,.07);
+    font-size: 22px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-title {
+    flex: 1;
+}
+
+.header-title h1 {
+    margin: 0 0 4px;
+    font-size: 22px;
+}
+
+.header-title p {
+    margin: 0;
+    color: #888;
+    font-size: 12px;
+}
+
+/* =========================
+   بطاقة القصة
+========================= */
+
+.story-hero {
+    background: linear-gradient(135deg, #6254eb, #8374ed);
+    color: white;
+    border-radius: 25px;
+    padding: 23px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 18px;
+    box-shadow: 0 10px 25px rgba(98,84,235,.20);
+}
+
+.story-hero-icon {
+    font-size: 58px;
+    margin-bottom: 8px;
+}
+
+.story-hero h2 {
+    margin: 0 0 9px;
+    font-size: 25px;
+}
+
+.story-hero p {
+    margin: 0;
+    opacity: .9;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.story-meta {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.meta-item {
+    background: rgba(255,255,255,.18);
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+}
+
+/* =========================
+   أدوات القراءة
+========================= */
+
+.reading-tools {
+    display: flex;
+    gap: 9px;
+    margin-bottom: 18px;
+}
+
+.tool-button {
+    flex: 1;
+    border: none;
+    background: white;
+    color: #5c51dc;
+    padding: 12px 8px;
+    border-radius: 14px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 3px 12px rgba(0,0,0,.05);
+}
+
+/* =========================
+   محتوى القصة
+========================= */
+
+.story-content {
+    background: white;
+    border-radius: 22px;
+    padding: 22px;
+    box-shadow: 0 3px 15px rgba(0,0,0,.05);
+    margin-bottom: 18px;
+}
+
+.story-content h3 {
+    margin: 0 0 17px;
+    font-size: 18px;
+}
+
+.story-text {
+    direction: ltr;
+    text-align: left;
+    font-size: 18px;
+    line-height: 2;
+    color: #292938;
+    white-space: pre-line;
+}
+
+.translation-box {
+    display: none;
+    background: #f3f1ff;
+    border-radius: 15px;
+    padding: 15px;
+    margin-top: 18px;
+    color: #5149a7;
+    line-height: 1.8;
+    font-size: 14px;
+    white-space: pre-line;
+}
+
+.translation-box.show {
+    display: block;
+}
+
+/* =========================
+   الكلمات
+========================= */
+
+.vocabulary-section {
+    margin-bottom: 18px;
+}
+
+.vocabulary-section h3 {
+    margin: 0 4px 12px;
+    font-size: 18px;
+}
+
+.vocabulary-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.vocabulary-card {
+    background: white;
+    border-radius: 16px;
+    padding: 13px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.04);
+}
+
+.vocabulary-card strong {
+    display: block;
+    direction: ltr;
+    text-align: left;
+    color: #5c51dc;
+    font-size: 15px;
+    margin-bottom: 5px;
+}
+
+.vocabulary-card span {
+    color: #777;
+    font-size: 12px;
+}
+
+/* =========================
+   الأسئلة
+========================= */
+
+.quiz-section {
+    background: white;
+    border-radius: 22px;
+    padding: 20px;
+    box-shadow: 0 3px 15px rgba(0,0,0,.05);
+    margin-bottom: 18px;
+}
+
+.quiz-section h3 {
+    margin: 0 0 17px;
+    font-size: 18px;
+}
+
+.question {
+    margin-bottom: 22px;
+}
+
+.question:last-child {
+    margin-bottom: 0;
+}
+
+.question-text {
+    font-weight: bold;
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.answers {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.answer {
+    width: 100%;
+    border: 1px solid #e5e5ed;
+    background: #fafafd;
+    border-radius: 12px;
+    padding: 11px;
+    text-align: right;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.answer.selected {
+    background: #eeeaff;
+    border-color: #7669f3;
+    color: #5149c8;
+    font-weight: bold;
+}
+
+.answer.correct {
+    background: #e4f9ef;
+    border-color: #4ac58a;
+    color: #20855a;
+}
+
+.answer.wrong {
+    background: #fff0f3;
+    border-color: #ef7187;
+    color: #c83e57;
+}
+
+/* =========================
+   زر التحقق
+========================= */
+
+.check-button {
+    width: 100%;
+    border: none;
+    border-radius: 15px;
+    padding: 14px;
+    background: linear-gradient(135deg, #6254eb, #8374ed);
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.result-box {
+    display: none;
+    text-align: center;
+    margin-top: 17px;
+    background: #f5f4ff;
+    border-radius: 15px;
+    padding: 17px;
+}
+
+.result-box.show {
+    display: block;
+}
+
+.result-number {
+    font-size: 28px;
+    font-weight: bold;
+    color: #5c51dc;
+    margin-bottom: 6px;
+}
+
+.result-text {
+    color: #666;
+    font-size: 13px;
+}
+
+/* =========================
+   تحميل / خطأ
+========================= */
+
+.loading {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    color: #777;
+}
+
+.error-box {
+    background: #fff0f3;
+    color: #c83e57;
+    border-radius: 18px;
+    padding: 20px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* =========================
+   الجوال
+========================= */
+
+@media (max-width: 420px) {
+
+    .story-page {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .story-hero {
+        padding: 20px;
+    }
+
+    .story-hero h2 {
+        font-size: 22px;
+    }
+
+    .story-content {
+        padding: 18px;
+    }
+
+    .story-text {
+        font-size: 17px;
+        line-height: 1.9;
+    }
+
+    .vocabulary-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<main class="story-page">
+
+    <!-- الهيدر -->
+
+    <header class="story-header">
+
+        <button
+            class="back-button"
+            onclick="window.location.href='reading.html'">
+
+            →
+
+        </button>
+
+        <div class="header-title">
+
+            <h1>Reading 📖</h1>
+
+            <p>اقرأ ثم اختبر فهمك</p>
+
+        </div>
+
+    </header>
+
+
+    <!-- بطاقة القصة -->
+
+    <section class="story-hero">
+
+        <div
+            class="story-hero-icon"
+            id="storyIcon">
+
+            📖
+
+        </div>
+
+        <h2 id="storyTitle">
+            جاري تحميل القصة...
+        </h2>
+
+        <p id="storyDescription">
+            ...
+        </p>
+
+        <div class="story-meta">
+
+            <span
+                class="meta-item"
+                id="storyLevel">
+
+                --
+
+            </span>
+
+            <span
+                class="meta-item"
+                id="storyTime">
+
+                ⏱ --
+
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- أدوات القراءة -->
+
+    <div class="reading-tools">
+
+        <button
+            class="tool-button"
+            onclick="speakStory()">
+
+            🔊 استمع
+
+        </button>
+
+        <button
+            class="tool-button"
+            onclick="toggleTranslation()">
+
+            🇸🇦 الترجمة
+
+        </button>
+
+    </div>
+
+
+    <!-- القصة -->
+
+    <section class="story-content">
+
+        <h3>
+            القصة
+        </h3>
+
+        <div
+            id="storyText"
+            class="story-text loading">
+
+            جاري تحميل القصة...
+
+        </div>
+
+        <div
+            id="translationBox"
+            class="translation-box">
+
+        </div>
+
+    </section>
+
+
+    <!-- الكلمات المهمة -->
+
+    <section class="vocabulary-section">
+
+        <h3>
+            كلمات مهمة 🧠
+        </h3>
+
+        <div
+            id="vocabularyList"
+            class="vocabulary-list">
+
+            <div class="loading">
+                جاري تحميل الكلمات...
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- الأسئلة -->
+
+    <section class="quiz-section">
+
+        <h3>
+            اختبر فهمك 📝
+        </h3>
+
+        <div id="questionsList">
+
+            <div class="loading">
+                جاري تحميل الأسئلة...
+            </div>
+
+        </div>
+
+        <button
+            id="checkButton"
+            class="check-button"
+            onclick="checkAnswers()">
+
+            تحقق من الإجابات
+
+        </button>
+
+        <div
+            id="resultBox"
+            class="result-box">
+
+            <div
+                id="resultNumber"
+                class="result-number">
+
+                0 / 0
+
+            </div>
+
+            <div
+                id="resultText"
+                class="result-text">
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- Supabase -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase.js"></script>
+
+
+<script>
+
+/* ==================================================
+   رقم القصة من الرابط
+================================================== */
+
+const urlParams =
+    new URLSearchParams(
+        window.location.search
+    );
+
+const storyId =
+    urlParams.get("id");
+
+
+/* ==================================================
+   التأكد من وجود رقم القصة
+================================================== */
+
+if (!storyId) {
+
+    showError("لم يتم تحديد رقم القصة.");
+
+}
+
+
+/* ==================================================
+   تحميل القصة
+================================================== */
+
+async function loadStory() {
+
+    try {
+
+        if (!storyId) return;
+
+
+        console.log(
+            "Loading story:",
+            storyId
+        );
+
+
+        const {
+            data: story,
+            error: storyError
+        } = await supabaseClient
+
+            .from("reading_stories")
+
+            .select("*")
+
+            .eq("id", storyId)
+
+            .single();
+
+
+        if (storyError) {
+
+            console.error(
+                "Story error:",
+                storyError
+            );
+
+            throw storyError;
+
+        }
+
+
+        if (!story) {
+
+            throw new Error(
+                "القصة غير موجودة."
+            );
+
+        }
+
+
+        /* ==========================
+           معلومات القصة
+        ========================== */
+
+        document.getElementById(
+            "storyTitle"
+        ).textContent =
+            story.title || "بدون عنوان";
+
+
+        document.getElementById(
+            "storyDescription"
+        ).textContent =
+            story.description || "";
+
+
+        document.getElementById(
+            "storyIcon"
+        ).textContent =
+            story.icon || "📖";
+
+
+        document.getElementById(
+            "storyLevel"
+        ).textContent =
+            story.level || "";
+
+
+        document.getElementById(
+            "storyTime"
+        ).textContent =
+            story.reading_time
+                ? "⏱ " + story.reading_time + " دقائق"
+                : "⏱ --";
+
+
+        /* ==========================
+           نص القصة
+        ========================== */
+
+        const storyText =
+            document.getElementById(
+                "storyText"
+            );
+
+
+        storyText.classList.remove(
+            "loading"
+        );
+
+
+        storyText.textContent =
+            story.content || "لا يوجد نص للقصة.";
+
+
+        /* ==========================
+           الترجمة
+        ========================== */
+
+        document.getElementById(
+            "translationBox"
+        ).textContent =
+            story.translation || "لا توجد ترجمة.";
+
+
+        /* ==========================
+           الكلمات والأسئلة
+        ========================== */
+
+        await Promise.all([
+
+            loadVocabulary(),
+
+            loadQuestions()
+
+        ]);
+
+
+    } catch (error) {
+
+        console.error(
+            "Story loading error:",
+            error
+        );
+
+        showError(
+            "حدث خطأ أثناء تحميل القصة."
+        );
+
+    }
+
+}
+
+
+/* ==================================================
+   تحميل الكلمات المهمة
+================================================== */
+
+async function loadVocabulary() {
+
+    const container =
+        document.getElementById(
+            "vocabularyList"
+        );
+
+
+    try {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+
+            .from("reading_vocabulary")
+
+            .select("*")
+
+            .eq("story_id", storyId)
+
+            .order(
+                "id",
+                {
+                    ascending: true
+                }
+            );
+
+
+        if (error) {
+
+            console.error(
+                "Vocabulary error:",
+                error
+            );
+
+            throw error;
+
+        }
+
+
+        if (!data || data.length === 0) {
+
+            container.innerHTML = `
+                <div class="loading"
+                     style="grid-column:1/-1;">
+
+                    لا توجد كلمات مهمة لهذه القصة.
+
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        container.innerHTML = "";
+
+
+        data.forEach(word => {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "vocabulary-card";
+
+
+            card.innerHTML = `
+
+                <strong>
+                    ${escapeHtml(
+                        word.english || ""
+                    )}
+                </strong>
+
+                <span>
+                    ${escapeHtml(
+                        word.arabic || ""
+                    )}
+                </span>
+
+            `;
+
+
+            container.appendChild(card);
+
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "Vocabulary loading error:",
+            error
+        );
+
+
+        container.innerHTML = `
+
+            <div
+                class="error-box"
+                style="grid-column:1/-1;">
+
+                تعذر تحميل الكلمات المهمة.
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* ==================================================
+   تحميل الأسئلة
+================================================== */
+
+let questionsData = [];
+
+
+async function loadQuestions() {
+
+    const container =
+        document.getElementById(
+            "questionsList"
+        );
+
+
+    try {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+
+            .from("reading_questions")
+
+            .select("*")
+
+            .eq("story_id", storyId)
+
+            .order(
+                "id",
+                {
+                    ascending: true
+                }
+            );
+
+
+        if (error) {
+
+            console.error(
+                "Questions error:",
+                error
+            );
+
+            throw error;
+
+        }
+
+
+        questionsData =
+            data || [];
+
+
+        if (
+            questionsData.length ===
+            0
+        ) {
+
+            container.innerHTML = `
+
+                <div class="loading">
+
+                    لا توجد أسئلة لهذه القصة.
+
+                </div>
+
+            `;
+
+
+            document.getElementById(
+                "checkButton"
+            ).style.display =
+                "none";
+
+
+            return;
+
+        }
+
+
+        container.innerHTML = "";
+
+
+        questionsData.forEach(
+            (question, index) => {
+
+
+                const questionDiv =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                questionDiv.className =
+                    "question";
+
+
+                questionDiv.dataset.questionId =
+                    question.id;
+
+
+                questionDiv.innerHTML = `
+
+                    <div class="question-text">
+
+                        ${index + 1}.
+                        ${escapeHtml(
+                            question.question || ""
+                        )}
+
+                    </div>
+
+                    <div class="answers">
+
+                        ${createAnswer(
+                            question,
+                            1
+                        )}
+
+                        ${createAnswer(
+                            question,
+                            2
+                        )}
+
+                        ${createAnswer(
+                            question,
+                            3
+                        )}
+
+                        ${createAnswer(
+                            question,
+                            4
+                        )}
+
+                    </div>
+
+                `;
+
+
+                container.appendChild(
+                    questionDiv
+                );
+
+            }
+        );
+
+
+        addAnswerEvents();
+
+    } catch (error) {
+
+        console.error(
+            "Questions loading error:",
+            error
+        );
+
+
+        container.innerHTML = `
+
+            <div class="error-box">
+
+                تعذر تحميل الأسئلة.
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* ==================================================
+   إنشاء خيار
+================================================== */
+
+function createAnswer(
+    question,
+    number
+) {
+
+    const value =
+        question[
+            "option" + number
+        ];
+
+
+    if (
+        value === null ||
+        value === undefined ||
+        value === ""
+    ) {
+
+        return "";
+
+    }
+
+
+    return `
+
+        <button
+            type="button"
+            class="answer"
+            data-option="${number}">
+
+            ${escapeHtml(
+                String(value)
+            )}
+
+        </button>
+
+    `;
+
+}
+
+
+/* ==================================================
+   أحداث الإجابات
+================================================== */
+
+function addAnswerEvents() {
+
+    document
+        .querySelectorAll(".answer")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                function() {
+
+                    const question =
+                        this.closest(
+                            ".question"
+                        );
+
+
+                    question
+                        .querySelectorAll(
+                            ".answer"
+                        )
+                        .forEach(answer => {
+
+                            answer.classList.remove(
+                                "selected"
+                            );
+
+                        });
+
+
+                    this.classList.add(
+                        "selected"
+                    );
+
+                }
+            );
+
+        });
+
+}
+
+
+/* ==================================================
+   التحقق من الإجابات
+================================================== */
+
+function checkAnswers() {
+
+    if (
+        questionsData.length ===
+        0
+    ) {
+
+        return;
+
+    }
+
+
+    let score = 0;
+
+
+    questionsData.forEach(
+        question => {
+
+            const questionElement =
+                document.querySelector(
+                    `.question[data-question-id="${question.id}"]`
+                );
+
+
+            if (!questionElement) {
+                return;
+            }
+
+
+            const selected =
+                questionElement.querySelector(
+                    ".answer.selected"
+                );
+
+
+            const answers =
+                questionElement.querySelectorAll(
+                    ".answer"
+                );
+
+
+            answers.forEach(answer => {
+
+                answer.classList.remove(
+                    "correct",
+                    "wrong"
+                );
+
+            });
+
+
+            if (!selected) {
+                return;
+            }
+
+
+            const selectedOption =
+                Number(
+                    selected.dataset.option
+                );
+
+
+            const correct =
+                getCorrectOption(
+                    question.correct_answer
+                );
+
+
+            if (
+                selectedOption ===
+                correct
+            ) {
+
+                score++;
+
+                selected.classList.add(
+                    "correct"
+                );
+
+            } else {
+
+                selected.classList.add(
+                    "wrong"
+                );
+
+
+                const correctButton =
+                    questionElement.querySelector(
+                        `.answer[data-option="${correct}"]`
+                    );
+
+
+                if (correctButton) {
+
+                    correctButton.classList.add(
+                        "correct"
+                    );
+
+                }
+
+            }
+
+        }
+    );
+
+
+    const total =
+        questionsData.length;
+
+
+    const resultNumber =
+        document.getElementById(
+            "resultNumber"
+        );
+
+
+    const resultText =
+        document.getElementById(
+            "resultText"
+        );
+
+
+    const resultBox =
+        document.getElementById(
+            "resultBox"
+        );
+
+
+    resultNumber.textContent =
+        `${score} / ${total}`;
+
+
+    if (
+        score === total
+    ) {
+
+        resultText.textContent =
+            "ممتاز! أجبت على جميع الأسئلة بشكل صحيح 🎉";
+
+    } else if (
+        score >= Math.ceil(total / 2)
+    ) {
+
+        resultText.textContent =
+            "جيد جدًا! حاول مراجعة الأخطاء مرة أخرى 💪";
+
+    } else {
+
+        resultText.textContent =
+            "اقرأ القصة مرة أخرى وحاول من جديد 📖";
+
+    }
+
+
+    resultBox.classList.add(
+        "show"
+    );
+
+
+    resultBox.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+
+}
+
+
+/* ==================================================
+   تحويل correct_answer
+==================================================
+
+   الكود يدعم إذا كانت القيمة:
+   1
+   2
+   3
+   4
+
+   أو:
+   option1
+   option2
+   option3
+   option4
+
+   أو:
+   A
+   B
+   C
+   D
+================================================== */
+
+function getCorrectOption(
+    value
+) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+
+        return 0;
+
+    }
+
+
+    const text =
+        String(value)
+            .trim()
+            .toLowerCase();
+
+
+    if (
+        text === "1" ||
+        text === "option1" ||
+        text === "a"
+    ) {
+
+        return 1;
+
+    }
+
+
+    if (
+        text === "2" ||
+        text === "option2" ||
+        text === "b"
+    ) {
+
+        return 2;
+
+    }
+
+
+    if (
+        text === "3" ||
+        text === "option3" ||
+        text === "c"
+    ) {
+
+        return 3;
+
+    }
+
+
+    if (
+        text === "4" ||
+        text === "option4" ||
+        text === "d"
+    ) {
+
+        return 4;
+
+    }
+
+
+    return 0;
+
+}
+
+
+/* ==================================================
+   الترجمة
+================================================== */
+
+function toggleTranslation() {
+
+    const box =
+        document.getElementById(
+            "translationBox"
+        );
+
+
+    box.classList.toggle(
+        "show"
+    );
+
+}
+
+
+/* ==================================================
+   النطق
+================================================== */
+
+function speakStory() {
+
+    if (
+        !("speechSynthesis" in window)
+    ) {
+
+        alert(
+            "المتصفح لا يدعم تشغيل النطق."
+        );
+
+        return;
+
+    }
+
+
+    const text =
+        document.getElementById(
+            "storyText"
+        ).innerText;
+
+
+    if (!text.trim()) {
+        return;
+    }
+
+
+    window.speechSynthesis.cancel();
+
+
+    const speech =
+        new SpeechSynthesisUtterance(
+            text
+        );
+
+
+    speech.lang =
+        "en-US";
+
+
+    speech.rate =
+        0.85;
+
+
+    window.speechSynthesis.speak(
+        speech
+    );
+
+}
+
+
+/* ==================================================
+   حماية النصوص
+================================================== */
+
+function escapeHtml(value) {
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* ==================================================
+   عرض الخطأ
+================================================== */
+
+function showError(
+    message
+) {
+
+    const page =
+        document.querySelector(
+            ".story-page"
+        );
+
+
+    const old =
+        document.getElementById(
+            "storyError"
+        );
+
+
+    if (old) {
+        old.remove();
+    }
+
+
+    const box =
+        document.createElement(
+            "div"
+        );
+
+
+    box.id =
+        "storyError";
+
+
+    box.className =
+        "error-box";
+
+
+    box.textContent =
+        message;
+
+
+    page.appendChild(box);
+
+}
+
+
+/* ==================================================
+   بدء التحميل
+================================================== */
+
+loadStory();
+
+</script>
+
+</body>
+
+</html>
+

@@ -1,233 +1,353 @@
-```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>لوحة التحكم</title>
 
     <link rel="stylesheet" href="admin.css">
+
 </head>
+
 
 <body>
 
-    <header class="topbar">
 
-        <div class="logo">
-            English<span>Words</span>
-        </div>
+<!-- ==========================================
+     الشريط العلوي
+========================================== -->
 
-        <div class="page-title">
-            ⚙️ لوحة التحكم
-        </div>
+<header class="topbar">
 
-        <button onclick="goHome()" class="home-btn">
-            🏠 الرئيسية
-        </button>
+    <div class="logo">
 
-    </header>
+        English<span>Words</span>
 
+    </div>
 
-    <main class="container">
 
-        <section class="admin-header">
+    <div class="page-title">
 
-            <div>
-                <span>إدارة المحتوى</span>
-                <h1>إضافة كلمة جديدة 📚</h1>
-                <p>
-                    أضف الكلمات والصور والجمل التي ستظهر للمتعلمين.
-                </p>
-            </div>
+        ⚙️ لوحة التحكم
 
-        </section>
+    </div>
 
 
-        <section class="form-card">
-
-            <div class="form-grid">
-
-                <!-- الكلمة -->
-
-                <div class="field">
-                    <label>🇬🇧 الكلمة الإنجليزية</label>
-
-                    <input
-                        type="text"
-                        id="english"
-                        placeholder="مثال: Apple"
-                    >
-                </div>
-
-
-                <!-- المعنى -->
-
-                <div class="field">
-                    <label>🇸🇦 المعنى بالعربي</label>
-
-                    <input
-                        type="text"
-                        id="arabic"
-                        placeholder="مثال: تفاحة"
-                    >
-                </div>
-
-
-                <!-- المستوى -->
-
-                <div class="field">
-                    <label>📊 المستوى</label>
-
-                    <select id="level">
-
-                        <option value="A1">A1 - مبتدئ</option>
-
-                        <option value="A2">A2 - متوسط</option>
-
-                        <option value="B1">B1 - متقدم</option>
-
-                    </select>
-                </div>
-
-
-                <!-- التصنيف -->
-
-                <div class="field">
-                    <label>🗂️ التصنيف</label>
-
-                    <select id="category">
-
-                        <option value="food">🍔 الطعام</option>
-
-                        <option value="home">🏠 المنزل</option>
-
-                        <option value="cars">🚗 السيارات</option>
-
-                        <option value="clothes">👕 الملابس</option>
-
-                        <option value="family">👨‍👩‍👧 العائلة</option>
-
-                        <option value="nature">🌳 الطبيعة</option>
-
-                    </select>
-                </div>
-
-            </div>
-
-
-            <!-- الصورة -->
-
-            <div class="field image-field">
-
-                <label>🖼️ صورة الكلمة</label>
-
-                <input
-                    type="file"
-                    id="image"
-                    accept="image/*"
-                    onchange="previewImage(event)"
-                >
-
-                <div id="imagePreview" class="image-preview">
-                    <span>🖼️</span>
-                    <p>ستظهر معاينة الصورة هنا</p>
-                </div>
-
-            </div>
-
-
-            <!-- الجملة -->
-
-            <div class="form-grid">
-
-                <div class="field">
-
-                    <label>💡 جملة بالإنجليزية</label>
-
-                    <input
-                        type="text"
-                        id="example"
-                        placeholder="I eat an apple."
-                    >
-
-                </div>
-
-
-                <div class="field">
-
-                    <label>🇸🇦 ترجمة الجملة</label>
-
-                    <input
-                        type="text"
-                        id="exampleArabic"
-                        placeholder="أنا آكل تفاحة."
-                    >
-
-                </div>
-
-            </div>
-
-
-            <button class="save-btn" onclick="saveWord()">
-                💾 حفظ الكلمة
-            </button>
-
-        </section>
-
-
-        <!-- الكلمات -->
-
-        <section class="words-section">
-
-            <div class="section-title">
-
-                <div>
-                    <h2>📚 الكلمات المضافة</h2>
-                    <p>الكلمات الموجودة في البرنامج</p>
-                </div>
-
-                <strong id="wordCount">0 كلمة</strong>
-
-            </div>
-      
-
-
-            <div class="search-box">
-    <input
-        type="text"
-        id="searchInput"
-        placeholder="🔍 ابحث عن كلمة..."
-        oninput="searchWords()"
+    <button
+        onclick="goHome()"
+        class="home-btn"
     >
-</div>
 
-            <div id="wordsList" class="words-list">
-            </div>
+        🏠 الرئيسية
 
-        </section>
+    </button>
 
-
+</header>
 
 
 
+<main class="container">
+
+
+<!-- ==========================================
+     عنوان لوحة التحكم
+========================================== -->
+
+<section class="admin-header">
+
+    <div>
+
+        <span>
+            إدارة المحتوى
+        </span>
+
+        <h1>
+            إضافة كلمة جديدة 📚
+        </h1>
+
+        <p>
+            أضف الكلمات والصور والجمل التي ستظهر للمتعلمين.
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==========================================
+     إضافة كلمة
+========================================== -->
+
+<section class="form-card">
+
+    <div class="form-grid">
+
+
+        <!-- الكلمة -->
+
+        <div class="field">
+
+            <label>
+                🇬🇧 الكلمة الإنجليزية
+            </label>
+
+            <input
+                type="text"
+                id="english"
+                placeholder="مثال: Apple"
+            >
+
+        </div>
+
+
+
+        <!-- المعنى -->
+
+        <div class="field">
+
+            <label>
+                🇸🇦 المعنى بالعربي
+            </label>
+
+            <input
+                type="text"
+                id="arabic"
+                placeholder="مثال: تفاحة"
+            >
+
+        </div>
+
+
+
+        <!-- المستوى -->
+
+        <div class="field">
+
+            <label>
+                📊 المستوى
+            </label>
+
+            <select id="level">
+
+                <option value="A1">
+                    A1 - مبتدئ
+                </option>
+
+                <option value="A2">
+                    A2 - متوسط
+                </option>
+
+                <option value="B1">
+                    B1 - متقدم
+                </option>
+
+            </select>
+
+        </div>
+
+
+
+        <!-- التصنيف -->
+
+        <div class="field">
+
+            <label>
+                🗂️ التصنيف
+            </label>
+
+            <select id="category">
+
+                <option value="">
+                    جاري تحميل التصنيفات...
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==========================================
+         الصورة
+    ========================================== -->
+
+    <div class="field image-field">
+
+        <label>
+            🖼️ صورة الكلمة
+        </label>
+
+        <input
+            type="file"
+            id="image"
+            accept="image/*"
+            onchange="previewImage(event)"
+        >
+
+
+        <div
+            id="imagePreview"
+            class="image-preview"
+        >
+
+            <span>
+                🖼️
+            </span>
+
+            <p>
+                ستظهر معاينة الصورة هنا
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==========================================
+         الجملة
+    ========================================== -->
+
+    <div class="form-grid">
+
+        <div class="field">
+
+            <label>
+                💡 جملة بالإنجليزية
+            </label>
+
+            <input
+                type="text"
+                id="example"
+                placeholder="I eat an apple."
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                🇸🇦 ترجمة الجملة
+            </label>
+
+            <input
+                type="text"
+                id="exampleArabic"
+                placeholder="أنا آكل تفاحة."
+            >
+
+        </div>
+
+    </div>
+
+
+
+    <button
+        class="save-btn"
+        onclick="saveWord()"
+    >
+
+        💾 حفظ الكلمة
+
+    </button>
+
+</section>
+
+
+
+<!-- ==========================================
+     الكلمات
+========================================== -->
+
+<section class="words-section">
+
+    <div class="section-title">
+
+        <div>
+
+            <h2>
+                📚 الكلمات المضافة
+            </h2>
+
+            <p>
+                الكلمات الموجودة في البرنامج
+            </p>
+
+        </div>
+
+
+        <strong id="wordCount">
+            0 كلمة
+        </strong>
+
+    </div>
+
+
+
+    <div class="search-box">
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="🔍 ابحث عن كلمة..."
+            oninput="searchWords()"
+        >
+
+    </div>
+
+
+    <div
+        id="wordsList"
+        class="words-list"
+    ></div>
+
+</section>
+
+
+
+<!-- ==========================================
+     رسائل المستخدمين
+========================================== -->
 
 <section class="messages-section">
 
     <div class="section-title">
+
         <div>
-            <h2>📢 رسائل المستخدمين</h2>
-            <p>أنشئ رسالة تظهر للمستخدمين خلال وقت تحدده</p>
+
+            <h2>
+                📢 رسائل المستخدمين
+            </h2>
+
+            <p>
+                أنشئ رسالة تظهر للمستخدمين خلال وقت تحدده
+            </p>
+
         </div>
+
     </div>
+
 
 
     <div class="form-card">
 
+
         <div class="field">
 
-            <label>📝 عنوان الرسالة</label>
+            <label>
+                📝 عنوان الرسالة
+            </label>
 
             <input
                 type="text"
@@ -238,9 +358,12 @@
         </div>
 
 
+
         <div class="field">
 
-            <label>💬 نص الرسالة</label>
+            <label>
+                💬 نص الرسالة
+            </label>
 
             <textarea
                 id="adminMessageText"
@@ -259,11 +382,14 @@
         </div>
 
 
+
         <div class="form-grid">
 
             <div class="field">
 
-                <label>🕐 يبدأ الظهور</label>
+                <label>
+                    🕐 يبدأ الظهور
+                </label>
 
                 <input
                     type="datetime-local"
@@ -275,49 +401,553 @@
 
             <div class="field">
 
-                 <label>⏰ ينتهي الظهور</label>
+                <label>
+                    ⏰ ينتهي الظهور
+                </label>
 
-                  <input
-                       type="datetime-local"
-                        id="messageEndsAt"
+                <input
+                    type="datetime-local"
+                    id="messageEndsAt"
                 >
 
-               </div>
+            </div>
 
-              </div>
-
-
-         <button
-              class="save-btn"
-                 onclick="saveAdminMessage()">
-
-                   📢 نشر الرسالة
-
-                </button>
-
-          </div>
+        </div>
 
 
-           <div
-         id="adminMessagesList"
+
+        <button
+            class="save-btn"
+            onclick="saveAdminMessage()"
+        >
+
+            📢 نشر الرسالة
+
+        </button>
+
+    </div>
+
+
+
+    <div
+        id="adminMessagesList"
+        class="words-list"
+        style="margin-top:20px;"
+    >
+
+        جاري تحميل الرسائل...
+
+    </div>
+
+</section>
+
+
+
+<!-- ==========================================
+     إدارة Reading
+========================================== -->
+
+<section class="reading-admin-section">
+
+
+    <div class="section-title">
+
+        <div>
+
+            <h2>
+                📖 إدارة Reading
+            </h2>
+
+            <p>
+                أضف القصص والأسئلة والكلمات المهمة للمتعلمين.
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- إضافة قصة -->
+
+    <div class="form-card">
+
+        <h2 style="margin-top:0;">
+            ➕ إضافة قصة جديدة
+        </h2>
+
+
+        <div class="form-grid">
+
+
+            <div class="field">
+
+                <label>
+                    📖 عنوان القصة
+                </label>
+
+                <input
+                    type="text"
+                    id="readingTitle"
+                    placeholder="مثال: A New Morning"
+                >
+
+            </div>
+
+
+
+            <div class="field">
+
+                <label>
+                    📝 وصف القصة
+                </label>
+
+                <input
+                    type="text"
+                    id="readingDescription"
+                    placeholder="مثال: قصة قصيرة عن بداية يوم جديد."
+                >
+
+            </div>
+
+
+
+            <div class="field">
+
+                <label>
+                    📊 المستوى
+                </label>
+
+                <select id="readingLevel">
+
+                    <option value="A1">
+                        A1 - مبتدئ
+                    </option>
+
+                    <option value="A2">
+                        A2 - متوسط
+                    </option>
+
+                    <option value="B1">
+                        B1 - متقدم
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <div class="field">
+
+                <label>
+                    🖼️ أيقونة القصة
+                </label>
+
+                <input
+                    type="text"
+                    id="readingIcon"
+                    value="📖"
+                    placeholder="📖"
+                >
+
+            </div>
+
+
+
+            <div class="field">
+
+                <label>
+                    ⏱ مدة القراءة بالدقائق
+                </label>
+
+                <input
+                    type="number"
+                    id="readingTime"
+                    value="3"
+                    min="1"
+                    max="60"
+                >
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="field">
+
+            <label>
+                🇬🇧 نص القصة بالإنجليزية
+            </label>
+
+            <textarea
+                id="readingContent"
+                rows="10"
+                placeholder="اكتب القصة هنا باللغة الإنجليزية..."
+                style="
+                    width:100%;
+                    padding:13px;
+                    border:1px solid #ddd;
+                    border-radius:10px;
+                    resize:vertical;
+                    font-size:16px;
+                    line-height:1.8;
+                "
+            ></textarea>
+
+        </div>
+
+
+
+        <div class="field">
+
+            <label>
+                🇸🇦 ترجمة القصة بالعربية
+            </label>
+
+            <textarea
+                id="readingTranslation"
+                rows="10"
+                placeholder="اكتب ترجمة القصة هنا..."
+                style="
+                    width:100%;
+                    padding:13px;
+                    border:1px solid #ddd;
+                    border-radius:10px;
+                    resize:vertical;
+                    font-size:16px;
+                    line-height:1.8;
+                "
+            ></textarea>
+
+        </div>
+
+
+
+        <div
+            style="
+                display:flex;
+                align-items:center;
+                gap:10px;
+                margin:15px 0;
+            "
+        >
+
+            <input
+                type="checkbox"
+                id="readingPublished"
+                checked
+                style="
+                    width:20px;
+                    height:20px;
+                "
+            >
+
+            <label
+                for="readingPublished"
+                style="cursor:pointer;"
+            >
+
+                ✅ نشر القصة للمتعلمين
+
+            </label>
+
+        </div>
+
+
+
+        <button
+            class="save-btn"
+            onclick="saveReadingStory()"
+        >
+
+            💾 حفظ القصة
+
+        </button>
+
+    </div>
+
+
+
+    <!-- القصص الموجودة -->
+
+    <div
+        class="words-section"
+        style="margin-top:20px;"
+    >
+
+        <div class="section-title">
+
+            <div>
+
+                <h2>
+                    📚 القصص الموجودة
+                </h2>
+
+                <p>
+                    إدارة القصص المضافة.
+                </p>
+
+            </div>
+
+
+            <strong id="readingStoryCount">
+                0 قصة
+            </strong>
+
+        </div>
+
+
+
+        <div
+            id="readingStoriesList"
             class="words-list"
-            style="margin-top:20px;">
+        >
 
-                   جاري تحميل الرسائل...
+            جاري تحميل القصص...
 
-                </div>
+        </div>
 
-            </section>
-
-
-
-    </main>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <script src="supabase.js"></script>
+    </div>
 
 
-    <script src="admin.js"></script>
+
+    <!-- إضافة سؤال -->
+
+    <div
+        class="form-card"
+        style="margin-top:20px;"
+    >
+
+        <h2 style="margin-top:0;">
+            📝 إضافة سؤال
+        </h2>
+
+
+        <div class="field">
+
+            <label>
+                📖 اختر القصة
+            </label>
+
+            <select id="questionStory">
+
+                <option value="">
+                    اختر قصة...
+                </option>
+
+            </select>
+
+        </div>
+
+
+
+        <div class="field">
+
+            <label>
+                ❓ السؤال
+            </label>
+
+            <input
+                type="text"
+                id="readingQuestion"
+                placeholder="مثال: What does Tom drink?"
+            >
+
+        </div>
+
+
+
+        <div class="form-grid">
+
+
+            <div class="field">
+
+                <label>
+                    1️⃣ الإجابة الأولى
+                </label>
+
+                <input
+                    type="text"
+                    id="readingOption1"
+                    placeholder="Milk"
+                >
+
+            </div>
+
+
+
+            <div class="field">
+
+                <label>
+                    2️⃣ الإجابة الثانية
+                </label>
+
+                <input
+                    type="text"
+                    id="readingOption2"
+                    placeholder="Coffee"
+                >
+
+            </div>
+
+
+
+            <div class="field">
+
+                <label>
+                    3️⃣ الإجابة الثالثة
+                </label>
+
+                <input
+                    type="text"
+                    id="readingOption3"
+                    placeholder="Juice"
+                >
+
+            </div>
+
+
+
+            <div class="field">
+
+                <label>
+                    4️⃣ الإجابة الرابعة
+                </label>
+
+                <input
+                    type="text"
+                    id="readingOption4"
+                    placeholder="Water"
+                >
+
+            </div>
+
+        </div>
+
+
+
+        <div class="field">
+
+            <label>
+                ✅ الإجابة الصحيحة
+            </label>
+
+            <select id="readingCorrectAnswer">
+
+                <option value="1">
+                    الإجابة الأولى
+                </option>
+
+                <option value="2">
+                    الإجابة الثانية
+                </option>
+
+                <option value="3">
+                    الإجابة الثالثة
+                </option>
+
+                <option value="4">
+                    الإجابة الرابعة
+                </option>
+
+            </select>
+
+        </div>
+
+
+
+        <button
+            class="save-btn"
+            onclick="saveReadingQuestion()"
+        >
+
+            ➕ إضافة السؤال
+
+        </button>
+
+    </div>
+
+
+
+    <!-- أسئلة القصة -->
+
+    <div
+        class="words-section"
+        style="margin-top:20px;"
+    >
+
+        <div class="section-title">
+
+            <div>
+
+                <h2>
+                    ❓ أسئلة القصص
+                </h2>
+
+                <p>
+                    اختر قصة لعرض أسئلتها.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="field">
+
+            <select
+                id="questionsFilterStory"
+                onchange="loadReadingQuestions()"
+            >
+
+                <option value="">
+                    اختر قصة...
+                </option>
+
+            </select>
+
+        </div>
+
+
+
+        <div
+            id="readingQuestionsList"
+            class="words-list"
+        >
+
+            اختر قصة لعرض الأسئلة.
+
+        </div>
+
+    </div>
+
+
+</section>
+
+
+</main>
+
+
+
+<!-- ==========================================
+     JavaScript
+========================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase.js"></script>
+
+<script src="categories.js"></script>
+
+<script src="admin.js"></script>
+
+<script src="notifications.js"></script>
+
 
 </body>
+
 </html>
