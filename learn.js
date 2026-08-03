@@ -1,208 +1,166 @@
-/* =========================================================
-   EnglishWords — صفحة اختيار المستوى والتصنيف
-   التصنيفات يتم تحميلها من Supabase
-========================================================= */
+// =========================================================
+// EnglishWords — صفحة اختيار المستوى والتصنيف
+// =========================================================
 
 
-/* =========================================================
-   المتغيرات
-========================================================= */
+// =========================================================
+// المتغيرات
+// =========================================================
 
 let selectedLevel = null;
 let selectedCategory = null;
 
 
-/* =========================================================
-   عند تحميل الصفحة
-========================================================= */
+// =========================================================
+// التصنيفات القديمة
+// مهم: لا نحذفها ولا نعتمد على جدول categories
+// لأن كلماتك في words مرتبطة بهذه القيم
+// =========================================================
 
-document.addEventListener("DOMContentLoaded", function () {
+const categories = [
+    {
+        key: "home",
+        name_ar: "المنزل",
+        name_en: "Home",
+        icon: "🏠"
+    },
 
-    loadCategories();
+    {
+        key: "food",
+        name_ar: "الطعام",
+        name_en: "Food",
+        icon: "🍔"
+    },
 
-    restorePreviousSelection();
+    {
+        key: "cars",
+        name_ar: "السيارات",
+        name_en: "Cars",
+        icon: "🚗"
+    },
 
-});
+    {
+        key: "clothes",
+        name_ar: "الملابس",
+        name_en: "Clothes",
+        icon: "👕"
+    },
+
+    {
+        key: "family",
+        name_ar: "العائلة",
+        name_en: "Family",
+        icon: "👨‍👩‍👧"
+    },
+
+    {
+        key: "nature",
+        name_ar: "الطبيعة",
+        name_en: "Nature",
+        icon: "🌳"
+    },
+
+    {
+        key: "animals",
+        name_ar: "الحيوانات",
+        name_en: "Animals",
+        icon: "🐾"
+    },
+
+    {
+        key: "colors",
+        name_ar: "الألوان",
+        name_en: "Colors",
+        icon: "🎨"
+    }
+];
 
 
-/* =========================================================
-   تحميل التصنيفات من Supabase
-========================================================= */
+// =========================================================
+// عند فتح الصفحة
+// =========================================================
 
-async function loadCategories() {
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        loadCategories();
+
+        restoreSelections();
+
+    }
+);
+
+
+// =========================================================
+// تحميل التصنيفات
+// =========================================================
+// لا نستخدم جدول categories هنا.
+// نستخدم نفس قيم category الموجودة أصلًا في words.
+// =========================================================
+
+function loadCategories() {
 
     const container =
-        document.getElementById("categoriesContainer");
-
-    const errorBox =
-        document.getElementById("categoryError");
+        document.getElementById(
+            "categoriesContainer"
+        );
 
 
     if (!container) {
+
+        console.error(
+            "❌ لم يتم العثور على categoriesContainer"
+        );
+
         return;
     }
 
 
-    // إخفاء الخطأ
-
-    if (errorBox) {
-        errorBox.hidden = true;
-    }
+    container.innerHTML = "";
 
 
-    // شاشة التحميل
+    categories.forEach(
+        function (category) {
 
-    container.innerHTML = `
-        <div class="loading-categories">
-
-            <div class="loading-spinner"></div>
-
-            <span>
-                جاري تحميل التصنيفات...
-            </span>
-
-        </div>
-    `;
-
-
-    try {
-
-        // التأكد أن Supabase موجود
-
-        if (
-            typeof supabaseClient === "undefined" ||
-            !supabaseClient
-        ) {
-
-            throw new Error(
-                "supabaseClient غير موجود"
-            );
-
-        }
-
-
-        // جلب التصنيفات
-
-        const { data, error } =
-            await supabaseClient
-
-                .from("categories")
-
-                .select(
-                    "id, name_ar, name_en, icon"
-                )
-
-                .order(
-                    "created_at",
-                    {
-                        ascending: true
-                    }
+            const button =
+                document.createElement(
+                    "button"
                 );
 
 
-        if (error) {
-
-            console.error(
-                "Categories error:",
-                error
-            );
-
-            throw error;
-        }
-
-
-        console.log(
-            "Categories loaded:",
-            data
-        );
-
-
-        // لا توجد بيانات
-
-        if (!data || data.length === 0) {
-
-            container.innerHTML = `
-
-                <div class="empty-categories">
-
-                    <div class="empty-icon">
-                        📂
-                    </div>
-
-                    <strong>
-                        لا توجد تصنيفات
-                    </strong>
-
-                    <small>
-                        لم يتم العثور على أي تصنيفات في قاعدة البيانات.
-                    </small>
-
-                </div>
-
-            `;
-
-            return;
-        }
-
-
-        // إنشاء التصنيفات
-
-        container.innerHTML = "";
-
-
-        data.forEach(function (category, index) {
-
-            const button =
-                document.createElement("button");
-
-
             button.type = "button";
+
 
             button.className =
                 "category-card";
 
 
-            button.dataset.categoryId =
-                category.id;
-
+            // مهم جدًا
+            // هذه هي القيمة الموجودة في جدول words
 
             button.dataset.category =
-                category.name_en || "";
+                category.key;
 
 
-            button.onclick = function () {
+            button.onclick =
+                function () {
 
-                selectCategory(
-                    this,
-                    category
-                );
+                    selectCategory(
+                        this,
+                        category.key
+                    );
 
-            };
-
-
-            // الأيقونة
-
-            const icon =
-                category.icon || "📚";
-
-
-            // الاسم العربي
-
-            const nameAr =
-                category.name_ar || "تصنيف";
-
-
-            // الاسم الإنجليزي
-
-            const nameEn =
-                category.name_en || "";
+                };
 
 
             button.innerHTML = `
 
                 <div class="category-icon">
 
-                    ${escapeHtml(icon)}
+                    ${escapeHtml(
+                        category.icon
+                    )}
 
                 </div>
 
@@ -210,392 +168,54 @@ async function loadCategories() {
                 <div class="category-info">
 
                     <strong>
-                        ${escapeHtml(nameAr)}
+
+                        ${escapeHtml(
+                            category.name_ar
+                        )}
+
                     </strong>
 
+
                     <small>
-                        ${escapeHtml(nameEn)}
+
+                        ${escapeHtml(
+                            category.name_en
+                        )}
+
                     </small>
 
                 </div>
 
 
                 <span class="category-check">
+
                     ✓
+
                 </span>
 
             `;
 
 
-            container.appendChild(button);
-
-        });
-
-
-        // استرجاع التصنيف السابق
-
-        restoreCategoryAfterLoad();
-
-
-    } catch (error) {
-
-        console.error(
-            "Failed to load categories:",
-            error
-        );
-
-
-        container.innerHTML = "";
-
-
-        if (errorBox) {
-
-            errorBox.hidden = false;
+            container.appendChild(
+                button
+            );
 
         }
-
-    }
-
-}
-
-
-/* =========================================================
-   اختيار المستوى
-========================================================= */
-
-function selectLevel(element, level) {
-
-    // إزالة التحديد من جميع المستويات
-
-    document
-        .querySelectorAll(".level-card")
-        .forEach(function (card) {
-
-            card.classList.remove("selected");
-
-        });
-
-
-    // تحديد المستوى الحالي
-
-    element.classList.add("selected");
-
-
-    selectedLevel = level;
-
-
-    // حفظ المستوى
-
-    localStorage.setItem(
-        "selectedLevel",
-        level
     );
 
-
-    updateStartButton();
-
 }
 
 
-/* =========================================================
-   اختيار التصنيف
-========================================================= */
-
-function selectCategory(element, category) {
-
-    // إزالة التحديد من جميع التصنيفات
-
-    document
-        .querySelectorAll(".category-card")
-        .forEach(function (card) {
-
-            card.classList.remove("selected");
-
-        });
-
-
-    // تحديد التصنيف
-
-    element.classList.add("selected");
-
-
-    /*
-       نخزن اسم التصنيف الإنجليزي
-       حتى يتوافق مع نظام الكلمات الحالي
-    */
-
-    selectedCategory =
-        category.name_en;
-
-
-    // حفظ ID التصنيف أيضًا
-
-    if (category.id) {
-
-        localStorage.setItem(
-            "selectedCategoryId",
-            category.id
-        );
-
-    }
-
-
-    // حفظ التصنيف
-
-    localStorage.setItem(
-        "selectedCategory",
-        selectedCategory
-    );
-
-
-    updateStartButton();
-
-}
-
-
-/* =========================================================
-   تفعيل زر البداية
-========================================================= */
-
-function updateStartButton() {
-
-    const button =
-        document.getElementById("startBtn");
-
-
-    const message =
-        document.getElementById(
-            "selectionMessage"
-        );
-
-
-    if (!button) {
-        return;
-    }
-
-
-    if (
-        selectedLevel &&
-        selectedCategory
-    ) {
-
-        button.disabled = false;
-
-
-        const text =
-            button.querySelector(
-                "span:first-child"
-            );
-
-
-        if (text) {
-
-            text.textContent =
-                "ابدأ التعلم 🚀";
-
-        }
-
-
-        if (message) {
-
-            message.textContent =
-                "ممتاز! جاهز لبدء التعلم 🚀";
-
-            message.classList.add(
-                "ready"
-            );
-
-        }
-
-    } else {
-
-        button.disabled = true;
-
-
-        const text =
-            button.querySelector(
-                "span:first-child"
-            );
-
-
-        if (text) {
-
-            text.textContent =
-                "ابدأ التعلم";
-
-        }
-
-
-        if (message) {
-
-            message.textContent =
-                "اختر المستوى والتصنيف للبدء 👆";
-
-            message.classList.remove(
-                "ready"
-            );
-
-        }
-
-    }
-
-}
-
-
-/* =========================================================
-   بدء التعلم
-========================================================= */
-
-function startLearning() {
-
-    if (
-        !selectedLevel ||
-        !selectedCategory
-    ) {
-
-        return;
-
-    }
-
-
-    // حفظ الاختيارات
-
-    localStorage.setItem(
-        "selectedLevel",
-        selectedLevel
-    );
-
-
-    localStorage.setItem(
-        "selectedCategory",
-        selectedCategory
-    );
-
-
-    // الانتقال إلى صفحة الكلمات
-
-    window.location.href =
-        "words.html";
-
-}
-
-
-/* =========================================================
-   استرجاع المستوى السابق
-========================================================= */
-
-function restorePreviousSelection() {
-
-    const savedLevel =
-        localStorage.getItem(
-            "selectedLevel"
-        );
-
-
-    if (!savedLevel) {
-        return;
-    }
-
-
-    const card =
-        document.querySelector(
-            `.level-card[data-level="${savedLevel}"]`
-        );
-
-
-    if (card) {
-
-        selectedLevel =
-            savedLevel;
-
-        card.classList.add(
-            "selected"
-        );
-
-    }
-
-
-    updateStartButton();
-
-}
-
-
-/* =========================================================
-   استرجاع التصنيف بعد تحميله
-========================================================= */
-
-function restoreCategoryAfterLoad() {
-
-    const savedCategory =
-        localStorage.getItem(
-            "selectedCategory"
-        );
-
-
-    if (!savedCategory) {
-
-        updateStartButton();
-
-        return;
-
-    }
-
-
-    const cards =
-        document.querySelectorAll(
-            ".category-card"
-        );
-
-
-    cards.forEach(function (card) {
-
-        const category =
-            card.dataset.category;
-
-
-        if (
-            category &&
-            category.toLowerCase() ===
-            savedCategory.toLowerCase()
-        ) {
-
-            card.classList.add(
-                "selected"
-            );
-
-            selectedCategory =
-                category;
-
-        }
-
-    });
-
-
-    updateStartButton();
-
-}
-
-
-/* =========================================================
-   الرجوع للرئيسية
-========================================================= */
-
-function goHome() {
-
-    window.location.href =
-        "index.html";
-
-}
-
-
-/* =========================================================
-   حماية النصوص القادمة من قاعدة البيانات
-========================================================= */
+// =========================================================
+// حماية النصوص
+// =========================================================
 
 function escapeHtml(value) {
 
-    if (value === null ||
-        value === undefined) {
+    if (
+        value === null ||
+        value === undefined
+    ) {
 
         return "";
 
@@ -628,5 +248,409 @@ function escapeHtml(value) {
             /'/g,
             "&#039;"
         );
+
+}
+
+
+// =========================================================
+// اختيار المستوى
+// =========================================================
+
+function selectLevel(
+    element,
+    level
+) {
+
+    document
+        .querySelectorAll(
+            ".level-card"
+        )
+        .forEach(
+            function (card) {
+
+                card.classList.remove(
+                    "selected"
+                );
+
+            }
+        );
+
+
+    element.classList.add(
+        "selected"
+    );
+
+
+    selectedLevel =
+        level;
+
+
+    localStorage.setItem(
+        "selectedLevel",
+        selectedLevel
+    );
+
+
+    updateStartButton();
+
+}
+
+
+// =========================================================
+// اختيار التصنيف
+// =========================================================
+
+function selectCategory(
+    element,
+    category
+) {
+
+    document
+        .querySelectorAll(
+            ".category-card"
+        )
+        .forEach(
+            function (card) {
+
+                card.classList.remove(
+                    "selected"
+                );
+
+            }
+        );
+
+
+    element.classList.add(
+        "selected"
+    );
+
+
+    // مثال:
+    // food
+    // home
+    // cars
+    // animals
+
+    selectedCategory =
+        category;
+
+
+    localStorage.setItem(
+        "selectedCategory",
+        selectedCategory
+    );
+
+
+    // نحذف ID القديم إن وجد
+    // حتى لا يسبب تعارضًا
+
+    localStorage.removeItem(
+        "selectedCategoryId"
+    );
+
+
+    updateStartButton();
+
+}
+
+
+// =========================================================
+// تحديث زر البداية
+// =========================================================
+
+function updateStartButton() {
+
+    const button =
+        document.getElementById(
+            "startBtn"
+        );
+
+
+    const message =
+        document.getElementById(
+            "selectionMessage"
+        );
+
+
+    if (!button) {
+
+        return;
+
+    }
+
+
+    if (
+        selectedLevel &&
+        selectedCategory
+    ) {
+
+        button.disabled =
+            false;
+
+
+        button.innerHTML = `
+
+            <span>
+                ابدأ التعلم 🚀
+            </span>
+
+            <span class="start-arrow">
+                ←
+            </span>
+
+        `;
+
+
+        if (message) {
+
+            message.textContent =
+                `ممتاز! ${selectedLevel} — ${getCategoryName(selectedCategory)} جاهز للبدء 🚀`;
+
+
+            message.classList.add(
+                "ready"
+            );
+
+        }
+
+    } else {
+
+        button.disabled =
+            true;
+
+
+        button.innerHTML = `
+
+            <span>
+                ابدأ التعلم
+            </span>
+
+            <span class="start-arrow">
+                ←
+            </span>
+
+        `;
+
+
+        if (message) {
+
+            message.textContent =
+                "اختر المستوى والتصنيف للبدء 👆";
+
+
+            message.classList.remove(
+                "ready"
+            );
+
+        }
+
+    }
+
+}
+
+
+// =========================================================
+// اسم التصنيف بالعربي
+// =========================================================
+
+function getCategoryName(
+    categoryKey
+) {
+
+    const category =
+        categories.find(
+            function (item) {
+
+                return item.key ===
+                    categoryKey;
+
+            }
+        );
+
+
+    if (!category) {
+
+        return categoryKey;
+
+    }
+
+
+    return category.name_ar;
+
+}
+
+
+// =========================================================
+// استرجاع الاختيارات السابقة
+// =========================================================
+
+function restoreSelections() {
+
+    const savedLevel =
+        localStorage.getItem(
+            "selectedLevel"
+        );
+
+
+    const savedCategory =
+        localStorage.getItem(
+            "selectedCategory"
+        );
+
+
+    // =====================================================
+    // المستوى
+    // =====================================================
+
+    if (savedLevel) {
+
+        document
+            .querySelectorAll(
+                ".level-card"
+            )
+            .forEach(
+                function (card) {
+
+                    const onclickValue =
+                        card.getAttribute(
+                            "onclick"
+                        );
+
+
+                    if (
+                        onclickValue &&
+                        onclickValue.includes(
+                            "'" +
+                            savedLevel +
+                            "'"
+                        )
+                    ) {
+
+                        card.classList.add(
+                            "selected"
+                        );
+
+
+                        selectedLevel =
+                            savedLevel;
+
+                    }
+
+                }
+            );
+
+    }
+
+
+    // =====================================================
+    // التصنيف
+    // =====================================================
+
+    if (savedCategory) {
+
+        const categoryCards =
+            document.querySelectorAll(
+                ".category-card"
+            );
+
+
+        categoryCards.forEach(
+            function (card) {
+
+                const cardCategory =
+                    card.dataset.category;
+
+
+                if (
+                    cardCategory ===
+                    savedCategory
+                ) {
+
+                    card.classList.add(
+                        "selected"
+                    );
+
+
+                    selectedCategory =
+                        cardCategory;
+
+                }
+
+            }
+        );
+
+    }
+
+
+    updateStartButton();
+
+}
+
+
+// =========================================================
+// بدء التعلم
+// =========================================================
+
+function startLearning() {
+
+    if (
+        !selectedLevel ||
+        !selectedCategory
+    ) {
+
+        return;
+
+    }
+
+
+    // =====================================================
+    // حفظ المستوى
+    // =====================================================
+
+    localStorage.setItem(
+        "selectedLevel",
+        selectedLevel
+    );
+
+
+    // =====================================================
+    // حفظ التصنيف بنفس الطريقة القديمة
+    // =====================================================
+
+    localStorage.setItem(
+        "selectedCategory",
+        selectedCategory
+    );
+
+
+    // =====================================================
+    // مهم:
+    // لا نرسل category ID
+    // لأن words تستخدم category مثل food/home/cars
+    // =====================================================
+
+    localStorage.removeItem(
+        "selectedCategoryId"
+    );
+
+
+    // =====================================================
+    // الانتقال للكلمات
+    // =====================================================
+
+    window.location.href =
+        "words.html";
+
+}
+
+
+// =========================================================
+// الرجوع للرئيسية
+// =========================================================
+
+function goHome() {
+
+    window.location.href =
+        "index.html";
 
 }
