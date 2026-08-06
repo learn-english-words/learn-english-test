@@ -72,14 +72,14 @@ async function loadWords() {
 
     if (error) {
 
-        console.error(
-            "Supabase error:",
-            error
-        );
+        console.error(error);
 
-        alert(
-            "❌ حدث خطأ أثناء تحميل الكلمات."
-        );
+alert(
+    "Code: " + error.code +
+    "\nMessage: " + error.message +
+    "\nDetails: " + error.details +
+    "\nHint: " + error.hint
+);
 
         return;
     }
