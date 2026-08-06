@@ -7,7 +7,26 @@ let words = [];
 let currentIndex = 0;
 
 let favorite = false;
+// ==========================================
+// المستخدم الحالي
+// ==========================================
 
+let currentUser = null;
+
+
+// ==========================================
+// تحميل المستخدم (إن وجد)
+// ==========================================
+
+async function loadCurrentUser() {
+
+    const {
+        data: { user }
+    } = await supabaseClient.auth.getUser();
+
+    currentUser = user || null;
+
+}
 
 // ==========================================
 // قراءة اختيار المستخدم
@@ -26,12 +45,7 @@ const selectedCategory =
 
 async function loadWords() {
 
-    const {
-        data: { user },
-        error: userError
-    } =
-        await supabaseClient.auth.getUser();
-
+   await loadCurrentUser();
 
     // لازم يكون مسجل دخول
 
@@ -713,6 +727,22 @@ async function answer(known) {
 
     const word =
         words[currentIndex];
+            // ==========================================
+    // إذا لم يكن المستخدم مسجل دخول
+    // ==========================================
+
+    if (!currentUser) {
+
+        alert(
+            "🔒 سجل الدخول لحفظ تقدمك، يمكنك التعلم بدون حساب."
+        );
+
+        window.location.href =
+            "login.html";
+
+        return;
+
+    }
 
 
     if (
