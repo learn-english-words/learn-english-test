@@ -19,6 +19,8 @@
 
 <script src="supabase.js"></script>
 
+<script src="presence.js"></script>
+
 <!-- مهم: بعد supabase.js -->
 
 <script src="notifications.js"></script>
@@ -3787,7 +3789,9 @@ window.addEventListener(
 loadCurrentUser();
 
 </script>
-
+<script>
+startPresence("chat");
+</script>
 </body>
 
 </html>

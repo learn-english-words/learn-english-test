@@ -1,3 +1,9 @@
+
+// ==========================================
+// EnglishWords — ADMIN.JS
+// ==========================================
+
+
 // ==========================================
 // متغيرات
 // ==========================================
@@ -7,7 +13,6 @@ let words = [];
 let selectedImage = "";
 
 let editingWordId = null;
-
 
 
 // ==========================================
@@ -57,88 +62,376 @@ async function checkAdmin() {
 }
 
 
-
 // ==========================================
-// تحميل التصنيفات
+// التصنيفات
 // ==========================================
 
-function loadAdminCategories() {
+async function loadAdminCategories() {
 
     const categorySelect =
-        document.getElementById(
-            "category"
-        );
+        document.getElementById("category");
+
+    const container =
+        document.getElementById("adminCategoriesList");
+
+    let databaseCategories = [];
 
 
-    if (!categorySelect) return;
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("categories")
+                .select(
+                    "id, name_ar, name_en, icon, created_at"
+                )
+                .order(
+                    "created_at",
+                    {
+                        ascending: true
+                    }
+                );
 
 
-    categorySelect.innerHTML = "";
+        if (error) {
 
+            console.error(
+                "Load categories error:",
+                error
+            );
 
-    if (
-        typeof categories === "undefined" ||
-        !Array.isArray(categories)
-    ) {
+        } else {
 
-        categorySelect.innerHTML = `
+            databaseCategories =
+                data || [];
 
-            <option value="">
-                حدث خطأ في تحميل التصنيفات
-            </option>
+        }
 
-        `;
+    } catch (error) {
 
         console.error(
-            "categories.js لم يتم تحميله."
+            "Unexpected load categories error:",
+            error
         );
+
+    }
+
+
+    const oldCategories =
+
+        typeof categories !== "undefined" &&
+        Array.isArray(categories)
+
+            ? categories
+
+            : [];
+
+
+    const allCategories = [];
+
+
+    oldCategories.forEach(
+        category => {
+
+            const oldKey =
+                String(
+                    category.key ||
+                    category.english ||
+                    category.name_en ||
+                    category.id ||
+                    ""
+                )
+                .trim()
+                .toLowerCase();
+
+
+            const oldNameAr =
+                String(
+                    category.name_ar ||
+                    category.name ||
+                    ""
+                )
+                .trim();
+
+
+            if (!oldKey) return;
+
+
+            allCategories.push({
+
+                id:
+                    category.id || null,
+
+                name_ar:
+                    oldNameAr || oldKey,
+
+                name_en:
+                    oldKey,
+
+                icon:
+                    category.icon ||
+                    "📚"
+
+            });
+
+        }
+    );
+
+
+    databaseCategories.forEach(
+        category => {
+
+            const categoryNameEn =
+                String(
+                    category.name_en ||
+                    ""
+                )
+                .trim()
+                .toLowerCase();
+
+
+            if (!categoryNameEn) return;
+
+
+            const exists =
+                allCategories.some(
+                    item => {
+
+                        return (
+                            String(
+                                item.name_en || ""
+                            )
+                            .trim()
+                            .toLowerCase() ===
+                            categoryNameEn
+                        );
+
+                    }
+                );
+
+
+            if (!exists) {
+
+                allCategories.push({
+
+                    id:
+                        category.id,
+
+                    name_ar:
+                        category.name_ar ||
+                        categoryNameEn,
+
+                    name_en:
+                        categoryNameEn,
+
+                    icon:
+                        category.icon ||
+                        "📚"
+
+                });
+
+            }
+
+        }
+    );
+
+
+    if (categorySelect) {
+
+        categorySelect.innerHTML = "";
+
+
+        const firstOption =
+            document.createElement("option");
+
+
+        firstOption.value = "";
+
+        firstOption.textContent =
+            "اختر التصنيف...";
+
+
+        categorySelect.appendChild(
+            firstOption
+        );
+
+
+        allCategories.forEach(
+            category => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    category.name_en;
+
+
+                option.dataset.categoryId =
+                    category.id || "";
+
+
+                option.textContent =
+                    `${category.icon} ${category.name_ar}`;
+
+
+                categorySelect.appendChild(
+                    option
+                );
+
+            }
+        );
+
+    }
+
+
+    if (!container) return;
+
+
+    container.innerHTML = "";
+
+
+    if (allCategories.length === 0) {
+
+        container.innerHTML = `
+
+            <div class="categories-error">
+
+                📂 لا توجد تصنيفات حاليًا
+
+            </div>
+
+        `;
 
         return;
     }
 
 
-    const firstOption =
-        document.createElement(
-            "option"
-        );
+    allCategories.forEach(
+        category => {
+
+            const item =
+                document.createElement("div");
 
 
-    firstOption.value = "";
+            item.className =
+                "admin-category-item";
 
 
-    firstOption.textContent =
-        "اختر التصنيف...";
+            const isOldCategory =
+                oldCategories.some(
+                    oldCategory => {
+
+                        const oldKey =
+                            String(
+                                oldCategory.key ||
+                                oldCategory.english ||
+                                oldCategory.name_en ||
+                                oldCategory.id ||
+                                ""
+                            )
+                            .trim()
+                            .toLowerCase();
 
 
-    categorySelect.appendChild(
-        firstOption
+                        return (
+                            oldKey ===
+                            String(
+                                category.name_en
+                            )
+                            .trim()
+                            .toLowerCase()
+                        );
+
+                    }
+                );
+
+
+            item.innerHTML = `
+
+                <div class="admin-category-icon">
+
+                    ${escapeAdminHtml(
+                        category.icon || "📚"
+                    )}
+
+                </div>
+
+
+                <div class="admin-category-info">
+
+                    <strong>
+
+                        ${escapeAdminHtml(
+                            category.name_ar || ""
+                        )}
+
+                    </strong>
+
+
+                    <small>
+
+                        ${escapeAdminHtml(
+                            category.name_en || ""
+                        )}
+
+                    </small>
+
+                </div>
+
+
+                ${
+                    isOldCategory
+
+                        ? `
+
+                            <span
+                                style="
+                                    font-size:12px;
+                                    color:#777;
+                                    padding:6px 9px;
+                                    background:#f3f3f3;
+                                    border-radius:8px;
+                                "
+                            >
+
+                                أساسي
+
+                            </span>
+
+                        `
+
+                        : `
+
+                            <button
+                                type="button"
+                                class="delete-category-btn"
+                                onclick="deleteCategory('${escapeAdminHtml(
+                                    category.id
+                                )}')"
+                            >
+
+                                🗑️ حذف
+
+                            </button>
+
+                        `
+                }
+
+            `;
+
+
+            container.appendChild(item);
+
+        }
     );
 
-
-    categories.forEach(category => {
-
-        const option =
-            document.createElement(
-                "option"
-            );
-
-
-        option.value =
-            category.id;
-
-
-        option.textContent =
-            `${category.icon} ${category.name}`;
-
-
-        categorySelect.appendChild(
-            option
-        );
-
-    });
-
 }
-
 
 
 // ==========================================
@@ -189,9 +482,8 @@ function previewImage(event) {
 }
 
 
-
 // ==========================================
-// رفع الصورة إلى Supabase Storage
+// رفع الصورة
 // ==========================================
 
 async function uploadImage(file) {
@@ -200,9 +492,7 @@ async function uploadImage(file) {
 
 
     const extension =
-        file.name
-            .split(".")
-            .pop();
+        file.name.split(".").pop();
 
 
     const fileName =
@@ -251,9 +541,8 @@ async function uploadImage(file) {
 }
 
 
-
 // ==========================================
-// تعبئة النموذج عند التعديل
+// تعديل كلمة
 // ==========================================
 
 function editWord(id) {
@@ -280,39 +569,27 @@ function editWord(id) {
         word.id;
 
 
-    document.getElementById(
-        "english"
-    ).value =
+    document.getElementById("english").value =
         word.english || "";
 
 
-    document.getElementById(
-        "arabic"
-    ).value =
+    document.getElementById("arabic").value =
         word.arabic || "";
 
 
-    document.getElementById(
-        "level"
-    ).value =
+    document.getElementById("level").value =
         word.level || "A1";
 
 
-    document.getElementById(
-        "category"
-    ).value =
+    document.getElementById("category").value =
         word.category || "";
 
 
-    document.getElementById(
-        "example"
-    ).value =
+    document.getElementById("example").value =
         word.example || "";
 
 
-    document.getElementById(
-        "exampleArabic"
-    ).value =
+    document.getElementById("exampleArabic").value =
         word.exampleArabic || "";
 
 
@@ -327,7 +604,9 @@ function editWord(id) {
         ).innerHTML = `
 
             <img
-                src="${word.image}"
+                src="${escapeAdminHtml(
+                    word.image
+                )}"
                 style="
                     width:100%;
                     height:100%;
@@ -344,13 +623,9 @@ function editWord(id) {
             "imagePreview"
         ).innerHTML = `
 
-            <span>
-                🖼️
-            </span>
+            <span>🖼️</span>
 
-            <p>
-                لا توجد صورة
-            </p>
+            <p>لا توجد صورة</p>
 
         `;
 
@@ -363,8 +638,12 @@ function editWord(id) {
         );
 
 
-    saveButton.textContent =
-        "✏️ حفظ التعديلات";
+    if (saveButton) {
+
+        saveButton.textContent =
+            "✏️ حفظ التعديلات";
+
+    }
 
 
     const title =
@@ -383,7 +662,7 @@ function editWord(id) {
 
     document.querySelector(
         ".form-card"
-    ).scrollIntoView({
+    )?.scrollIntoView({
 
         behavior: "smooth",
 
@@ -394,9 +673,8 @@ function editWord(id) {
 }
 
 
-
 // ==========================================
-// حفظ كلمة جديدة أو تعديل
+// حفظ كلمة
 // ==========================================
 
 async function saveWord() {
@@ -429,7 +707,9 @@ async function saveWord() {
     const category =
         document.getElementById(
             "category"
-        ).value;
+        ).value
+        .trim()
+        .toLowerCase();
 
 
     const example =
@@ -445,9 +725,7 @@ async function saveWord() {
 
 
     const imageInput =
-        document.getElementById(
-            "image"
-        );
+        document.getElementById("image");
 
 
     const file =
@@ -494,14 +772,16 @@ async function saveWord() {
         );
 
 
-    saveButton.disabled =
-        true;
+    if (saveButton) {
 
+        saveButton.disabled = true;
 
-    saveButton.textContent =
-        editingWordId
-            ? "⏳ جاري تعديل الكلمة..."
-            : "⏳ جاري الحفظ...";
+        saveButton.textContent =
+            editingWordId
+                ? "⏳ جاري تعديل الكلمة..."
+                : "⏳ جاري الحفظ...";
+
+    }
 
 
     let imageUrl =
@@ -516,15 +796,17 @@ async function saveWord() {
 
         if (!imageUrl) {
 
-            saveButton.disabled =
-                false;
+            if (saveButton) {
 
+                saveButton.disabled =
+                    false;
 
-            saveButton.textContent =
-                editingWordId
-                    ? "✏️ حفظ التعديلات"
-                    : "💾 حفظ الكلمة";
+                saveButton.textContent =
+                    editingWordId
+                        ? "✏️ حفظ التعديلات"
+                        : "💾 حفظ الكلمة";
 
+            }
 
             return;
         }
@@ -558,11 +840,6 @@ async function saveWord() {
     };
 
 
-
-    // ======================================
-    // تعديل كلمة
-    // ======================================
-
     if (editingWordId) {
 
         const {
@@ -570,18 +847,12 @@ async function saveWord() {
             error
         } =
             await supabaseClient
-
                 .from("words")
-
-                .update(
-                    wordData
-                )
-
+                .update(wordData)
                 .eq(
                     "id",
                     editingWordId
                 )
-
                 .select()
                 .single();
 
@@ -597,13 +868,15 @@ async function saveWord() {
             );
 
 
-            saveButton.disabled =
-                false;
+            if (saveButton) {
 
+                saveButton.disabled =
+                    false;
 
-            saveButton.textContent =
-                "✏️ حفظ التعديلات";
+                saveButton.textContent =
+                    "✏️ حفظ التعديلات";
 
+            }
 
             return;
         }
@@ -630,23 +903,13 @@ async function saveWord() {
     }
 
 
-
-    // ======================================
-    // إضافة كلمة جديدة
-    // ======================================
-
     const {
         data,
         error
     } =
         await supabaseClient
-
             .from("words")
-
-            .insert(
-                wordData
-            )
-
+            .insert(wordData)
             .select()
             .single();
 
@@ -662,13 +925,15 @@ async function saveWord() {
         );
 
 
-        saveButton.disabled =
-            false;
+        if (saveButton) {
 
+            saveButton.disabled =
+                false;
 
-        saveButton.textContent =
-            "💾 حفظ الكلمة";
+            saveButton.textContent =
+                "💾 حفظ الكلمة";
 
+        }
 
         return;
     }
@@ -693,65 +958,37 @@ async function saveWord() {
 }
 
 
-
 // ==========================================
 // إعادة النموذج
 // ==========================================
 
 function resetForm() {
 
-    editingWordId =
-        null;
+    editingWordId = null;
+
+    selectedImage = "";
 
 
-    selectedImage =
-        "";
+    document.getElementById("english").value = "";
 
+    document.getElementById("arabic").value = "";
 
-    document.getElementById(
-        "english"
-    ).value = "";
+    document.getElementById("example").value = "";
 
+    document.getElementById("exampleArabic").value = "";
 
-    document.getElementById(
-        "arabic"
-    ).value = "";
+    document.getElementById("image").value = "";
 
+    document.getElementById("level").value = "A1";
 
-    document.getElementById(
-        "example"
-    ).value = "";
-
-
-    document.getElementById(
-        "exampleArabic"
-    ).value = "";
-
-
-    document.getElementById(
-        "image"
-    ).value = "";
-
-
-    document.getElementById(
-        "level"
-    ).value =
-        "A1";
-
-
-    document.getElementById(
-        "category"
-    ).value =
-        "";
+    document.getElementById("category").value = "";
 
 
     document.getElementById(
         "imagePreview"
     ).innerHTML = `
 
-        <span>
-            🖼️
-        </span>
+        <span>🖼️</span>
 
         <p>
             ستظهر معاينة الصورة هنا
@@ -766,12 +1003,15 @@ function resetForm() {
         );
 
 
-    saveButton.disabled =
-        false;
+    if (saveButton) {
 
+        saveButton.disabled =
+            false;
 
-    saveButton.textContent =
-        "💾 حفظ الكلمة";
+        saveButton.textContent =
+            "💾 حفظ الكلمة";
+
+    }
 
 
     const title =
@@ -783,12 +1023,11 @@ function resetForm() {
     if (title) {
 
         title.textContent =
-            "إضافة كلمة جديدة 📚";
+            "لوحة تحكم EnglishWords 📚";
 
     }
 
 }
-
 
 
 // ==========================================
@@ -809,11 +1048,8 @@ async function loadWords() {
         error
     } =
         await supabaseClient
-
             .from("words")
-
             .select("*")
-
             .order(
                 "created_at",
                 {
@@ -846,7 +1082,6 @@ async function loadWords() {
 }
 
 
-
 // ==========================================
 // عرض الكلمات
 // ==========================================
@@ -870,39 +1105,38 @@ function renderWords(
     if (!wordsList) return;
 
 
-    count.textContent =
-        words.length +
-        " كلمة";
+    if (count) {
+
+        count.textContent =
+            words.length + " كلمة";
+
+    }
 
 
-    if (
-        displayWords.length === 0
-    ) {
+    if (displayWords.length === 0) {
 
         wordsList.innerHTML = `
 
             <div class="word-item">
+
                 لا توجد كلمات.
+
             </div>
 
         `;
-
 
         return;
     }
 
 
-    wordsList.innerHTML =
-        "";
+    wordsList.innerHTML = "";
 
 
     displayWords.forEach(
         word => {
 
             const item =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
 
             item.className =
@@ -935,6 +1169,7 @@ function renderWords(
                         )}
                     </h3>
 
+
                     <p>
                         ${escapeAdminHtml(
                             word.arabic || ""
@@ -945,15 +1180,20 @@ function renderWords(
                     <div class="word-tags">
 
                         <span class="tag">
+
                             ${escapeAdminHtml(
                                 word.level || ""
                             )}
+
                         </span>
 
+
                         <span class="tag">
+
                             ${escapeAdminHtml(
                                 categoryName
                             )}
+
                         </span>
 
                     </div>
@@ -965,7 +1205,9 @@ function renderWords(
 
                     <button
                         class="edit-btn"
-                        onclick="editWord('${word.id}')"
+                        onclick="editWord('${escapeAdminHtml(
+                            word.id
+                        )}')"
                     >
 
                         ✏️ تعديل
@@ -975,7 +1217,9 @@ function renderWords(
 
                     <button
                         class="delete-btn"
-                        onclick="deleteWord('${word.id}')"
+                        onclick="deleteWord('${escapeAdminHtml(
+                            word.id
+                        )}')"
                     >
 
                         🗑️ حذف
@@ -987,9 +1231,7 @@ function renderWords(
             `;
 
 
-            wordsList.appendChild(
-                item
-            );
+            wordsList.appendChild(item);
 
         }
     );
@@ -997,47 +1239,110 @@ function renderWords(
 }
 
 
-
 // ==========================================
 // اسم التصنيف
 // ==========================================
 
-function getCategoryName(
-    categoryId
-) {
+function getCategoryName(categoryKey) {
+
+    if (!categoryKey) {
+        return "";
+    }
+
+
+    const key =
+        String(categoryKey)
+            .trim()
+            .toLowerCase();
+
 
     if (
-        typeof categories === "undefined"
+        typeof categories !== "undefined" &&
+        Array.isArray(categories)
     ) {
 
-        return categoryId || "";
+        const oldCategory =
+            categories.find(
+                item => {
+
+                    const itemKey =
+                        String(
+                            item.key ||
+                            item.english ||
+                            item.name_en ||
+                            item.id ||
+                            ""
+                        )
+                        .trim()
+                        .toLowerCase();
+
+
+                    return itemKey === key;
+
+                }
+            );
+
+
+        if (oldCategory) {
+
+            return (
+
+                oldCategory.icon
+                    ? oldCategory.icon + " "
+                    : ""
+
+            ) +
+
+                (
+                    oldCategory.name_ar ||
+                    oldCategory.name ||
+                    key
+                );
+
+        }
 
     }
 
 
-    const category =
-        categories.find(
-            item =>
-                item.id ===
-                categoryId
+    const categorySelect =
+        document.getElementById(
+            "category"
         );
 
 
-    if (!category) {
+    if (categorySelect) {
 
-        return categoryId || "";
+        const option =
+            Array.from(
+                categorySelect.options
+            ).find(
+                item => {
+
+                    return (
+                        String(
+                            item.value
+                        )
+                        .trim()
+                        .toLowerCase() ===
+                        key
+                    );
+
+                }
+            );
+
+
+        if (option) {
+
+            return option.textContent;
+
+        }
 
     }
 
 
-    return (
-        category.icon +
-        " " +
-        category.name
-    );
+    return categoryKey || "";
 
 }
-
 
 
 // ==========================================
@@ -1079,8 +1384,8 @@ function searchWords() {
                         word.english ||
                         ""
                     )
-                        .toLowerCase()
-                        .includes(search)
+                    .toLowerCase()
+                    .includes(search)
 
                     ||
 
@@ -1088,8 +1393,17 @@ function searchWords() {
                         word.arabic ||
                         ""
                     )
-                        .toLowerCase()
-                        .includes(search)
+                    .toLowerCase()
+                    .includes(search)
+
+                    ||
+
+                    (
+                        word.category ||
+                        ""
+                    )
+                    .toLowerCase()
+                    .includes(search)
 
                 );
 
@@ -1097,12 +1411,9 @@ function searchWords() {
         );
 
 
-    renderWords(
-        filtered
-    );
+    renderWords(filtered);
 
 }
-
 
 
 // ==========================================
@@ -1132,11 +1443,8 @@ async function deleteWord(id) {
         error
     } =
         await supabaseClient
-
             .from("words")
-
             .delete()
-
             .eq(
                 "id",
                 id
@@ -1178,7 +1486,6 @@ async function deleteWord(id) {
 }
 
 
-
 // ==========================================
 // الرئيسية
 // ==========================================
@@ -1189,7 +1496,6 @@ function goHome() {
         "index.html";
 
 }
-
 
 
 // ==========================================
@@ -1209,16 +1515,16 @@ async function saveAdminMessage() {
         document.getElementById(
             "adminMessageTitle"
         )
-            .value
-            .trim();
+        .value
+        .trim();
 
 
     const message =
         document.getElementById(
             "adminMessageText"
         )
-            .value
-            .trim();
+        .value
+        .trim();
 
 
     const startsInput =
@@ -1243,7 +1549,6 @@ async function saveAdminMessage() {
         alert(
             "⚠️ املأ جميع بيانات الرسالة."
         );
-
 
         return;
     }
@@ -1270,7 +1575,6 @@ async function saveAdminMessage() {
             "⚠️ وقت الانتهاء يجب أن يكون بعد وقت البداية."
         );
 
-
         return;
     }
 
@@ -1279,9 +1583,7 @@ async function saveAdminMessage() {
         error
     } =
         await supabaseClient
-
             .from("admin_messages")
-
             .insert({
 
                 title:
@@ -1311,7 +1613,6 @@ async function saveAdminMessage() {
             "❌ حدث خطأ أثناء نشر الرسالة:\n" +
             error.message
         );
-
 
         return;
     }
@@ -1347,9 +1648,8 @@ async function saveAdminMessage() {
 }
 
 
-
 // ==========================================
-// تحميل رسائل الأدمن
+// تحميل الرسائل
 // ==========================================
 
 async function loadAdminMessages() {
@@ -1366,11 +1666,8 @@ async function loadAdminMessages() {
         error
     } =
         await supabaseClient
-
             .from("admin_messages")
-
             .select("*")
-
             .order(
                 "created_at",
                 {
@@ -1379,15 +1676,15 @@ async function loadAdminMessages() {
             );
 
 
+    const container =
+        document.getElementById(
+            "adminMessagesList"
+        );
+
+
     if (error) {
 
         console.error(error);
-
-
-        const container =
-            document.getElementById(
-                "adminMessagesList"
-            );
 
 
         if (container) {
@@ -1397,28 +1694,17 @@ async function loadAdminMessages() {
 
         }
 
-
         return;
     }
-
-
-    const container =
-        document.getElementById(
-            "adminMessagesList"
-        );
 
 
     if (!container) return;
 
 
-    container.innerHTML =
-        "";
+    container.innerHTML = "";
 
 
-    if (
-        !data ||
-        data.length === 0
-    ) {
+    if (!data || data.length === 0) {
 
         container.innerHTML = `
 
@@ -1430,7 +1716,6 @@ async function loadAdminMessages() {
 
         `;
 
-
         return;
     }
 
@@ -1439,9 +1724,7 @@ async function loadAdminMessages() {
         msg => {
 
             const item =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
 
             item.className =
@@ -1451,19 +1734,17 @@ async function loadAdminMessages() {
             const start =
                 new Date(
                     msg.starts_at
-                )
-                    .toLocaleString(
-                        "ar-SA"
-                    );
+                ).toLocaleString(
+                    "ar-SA"
+                );
 
 
             const end =
                 new Date(
                     msg.ends_at
-                )
-                    .toLocaleString(
-                        "ar-SA"
-                    );
+                ).toLocaleString(
+                    "ar-SA"
+                );
 
 
             const now =
@@ -1472,12 +1753,8 @@ async function loadAdminMessages() {
 
             const active =
                 msg.is_active &&
-                new Date(
-                    msg.starts_at
-                ) <= now &&
-                new Date(
-                    msg.ends_at
-                ) > now;
+                new Date(msg.starts_at) <= now &&
+                new Date(msg.ends_at) > now;
 
 
             item.innerHTML = `
@@ -1485,50 +1762,34 @@ async function loadAdminMessages() {
                 <div class="word-info">
 
                     <h3>
-
                         📢
-                        ${escapeHtml(
-                            msg.title
-                        )}
-
+                        ${escapeHtml(msg.title)}
                     </h3>
 
 
                     <p>
-
-                        ${escapeHtml(
-                            msg.message
-                        )}
-
+                        ${escapeHtml(msg.message)}
                     </p>
 
 
                     <div class="word-tags">
 
                         <span class="tag">
-
-                            🕐
-                            ${start}
-
+                            🕐 ${start}
                         </span>
 
 
                         <span class="tag">
-
-                            ⏰
-                            ${end}
-
+                            ⏰ ${end}
                         </span>
 
 
                         <span class="tag">
-
                             ${
                                 active
                                     ? "🟢 فعالة"
                                     : "⚪ غير فعالة"
                             }
-
                         </span>
 
                     </div>
@@ -1542,7 +1803,7 @@ async function loadAdminMessages() {
                         class="delete-btn"
                         onclick="
                             deleteAdminMessage(
-                                '${msg.id}'
+                                '${escapeHtml(msg.id)}'
                             )
                         "
                     >
@@ -1556,15 +1817,12 @@ async function loadAdminMessages() {
             `;
 
 
-            container.appendChild(
-                item
-            );
+            container.appendChild(item);
 
         }
     );
 
 }
-
 
 
 // ==========================================
@@ -1594,11 +1852,8 @@ async function deleteAdminMessage(id) {
         error
     } =
         await supabaseClient
-
             .from("admin_messages")
-
             .delete()
-
             .eq(
                 "id",
                 id
@@ -1615,7 +1870,6 @@ async function deleteAdminMessage(id) {
             error.message
         );
 
-
         return;
     }
 
@@ -1630,17 +1884,14 @@ async function deleteAdminMessage(id) {
 }
 
 
-
 // ==========================================
-// حماية النص
+// حماية HTML
 // ==========================================
 
 function escapeHtml(text) {
 
     const div =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
 
     div.textContent =
@@ -1655,9 +1906,7 @@ function escapeHtml(text) {
 function escapeAdminHtml(text) {
 
     const div =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
 
     div.textContent =
@@ -1667,7 +1916,6 @@ function escapeAdminHtml(text) {
     return div.innerHTML;
 
 }
-
 
 
 // ==================================================
@@ -1738,7 +1986,6 @@ async function saveReadingStory() {
             "اكتب عنوان القصة."
         );
 
-
         return;
     }
 
@@ -1749,7 +1996,6 @@ async function saveReadingStory() {
             "اكتب نص القصة بالإنجليزية."
         );
 
-
         return;
     }
 
@@ -1759,9 +2005,7 @@ async function saveReadingStory() {
         error
     } =
         await supabaseClient
-
             .from("reading_stories")
-
             .insert({
 
                 title:
@@ -1789,9 +2033,7 @@ async function saveReadingStory() {
                     isPublished
 
             })
-
             .select()
-
             .single();
 
 
@@ -1808,7 +2050,6 @@ async function saveReadingStory() {
             error.message
         );
 
-
         return;
     }
 
@@ -1821,10 +2062,9 @@ async function saveReadingStory() {
     clearReadingStoryForm();
 
 
-    loadReadingStories();
+    await loadReadingStories();
 
 }
-
 
 
 // ==================================================
@@ -1845,20 +2085,17 @@ function clearReadingStoryForm() {
 
     document.getElementById(
         "readingLevel"
-    ).value =
-        "A1";
+    ).value = "A1";
 
 
     document.getElementById(
         "readingIcon"
-    ).value =
-        "📖";
+    ).value = "📖";
 
 
     document.getElementById(
         "readingTime"
-    ).value =
-        "3";
+    ).value = "3";
 
 
     document.getElementById(
@@ -1873,11 +2110,9 @@ function clearReadingStoryForm() {
 
     document.getElementById(
         "readingPublished"
-    ).checked =
-        true;
+    ).checked = true;
 
 }
-
 
 
 // ==================================================
@@ -1904,11 +2139,8 @@ async function loadReadingStories() {
         error
     } =
         await supabaseClient
-
             .from("reading_stories")
-
             .select("*")
-
             .order(
                 "created_at",
                 {
@@ -1928,7 +2160,6 @@ async function loadReadingStories() {
         container.innerHTML =
             "❌ حدث خطأ أثناء تحميل القصص.";
 
-
         return;
     }
 
@@ -1946,40 +2177,32 @@ async function loadReadingStories() {
     if (count) {
 
         count.textContent =
-            stories.length +
-            " قصة";
+            stories.length + " قصة";
 
     }
 
 
-    if (
-        stories.length === 0
-    ) {
+    if (stories.length === 0) {
 
         container.innerHTML =
             "لا توجد قصص حتى الآن.";
 
 
-        updateReadingStorySelects(
-            []
-        );
+        updateReadingStorySelects([]);
 
 
         return;
     }
 
 
-    container.innerHTML =
-        "";
+    container.innerHTML = "";
 
 
     stories.forEach(
         story => {
 
             const card =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
 
             card.style.cssText = `
@@ -2008,7 +2231,6 @@ async function loadReadingStories() {
                     align-items:flex-start;
                 ">
 
-
                     <div>
 
                         <strong style="
@@ -2016,8 +2238,7 @@ async function loadReadingStories() {
                         ">
 
                             ${escapeAdminHtml(
-                                story.icon ||
-                                "📖"
+                                story.icon || "📖"
                             )}
 
                             ${escapeAdminHtml(
@@ -2044,8 +2265,7 @@ async function loadReadingStories() {
                             ⏱
 
                             ${
-                                story.reading_time ||
-                                3
+                                story.reading_time || 3
                             }
 
                             دقائق
@@ -2064,8 +2284,7 @@ async function loadReadingStories() {
                         ">
 
                             ${escapeAdminHtml(
-                                story.description ||
-                                ""
+                                story.description || ""
                             )}
 
                         </p>
@@ -2076,7 +2295,9 @@ async function loadReadingStories() {
                     <button
                         onclick="
                             deleteReadingStory(
-                                ${story.id}
+                                '${escapeAdminHtml(
+                                    story.id
+                                )}'
                             )
                         "
                         style="
@@ -2098,9 +2319,7 @@ async function loadReadingStories() {
             `;
 
 
-            container.appendChild(
-                card
-            );
+            container.appendChild(card);
 
         }
     );
@@ -2113,14 +2332,11 @@ async function loadReadingStories() {
 }
 
 
-
 // ==================================================
 // تحديث قوائم القصص
 // ==================================================
 
-function updateReadingStorySelects(
-    stories
-) {
+function updateReadingStorySelects(stories) {
 
     const questionStory =
         document.getElementById(
@@ -2174,20 +2390,11 @@ function updateReadingStorySelects(
 
 
             option1.textContent =
-                `${
-                    story.icon ||
-                    "📖"
-                } ${
-                    story.title
-                } (${
-                    story.level
-                })`;
+                `${story.icon || "📖"} ${story.title} (${story.level})`;
 
 
             const option2 =
-                option1.cloneNode(
-                    true
-                );
+                option1.cloneNode(true);
 
 
             if (questionStory) {
@@ -2213,7 +2420,6 @@ function updateReadingStorySelects(
 }
 
 
-
 // ==================================================
 // حذف قصة
 // ==================================================
@@ -2234,11 +2440,8 @@ async function deleteReadingStory(id) {
         error
     } =
         await supabaseClient
-
             .from("reading_stories")
-
             .delete()
-
             .eq(
                 "id",
                 id
@@ -2258,7 +2461,6 @@ async function deleteReadingStory(id) {
             error.message
         );
 
-
         return;
     }
 
@@ -2268,7 +2470,7 @@ async function deleteReadingStory(id) {
     );
 
 
-    loadReadingStories();
+    await loadReadingStories();
 
 
     const questionsList =
@@ -2285,7 +2487,6 @@ async function deleteReadingStory(id) {
     }
 
 }
-
 
 
 // ==================================================
@@ -2344,7 +2545,6 @@ async function saveReadingQuestion() {
             "اختر القصة أولًا."
         );
 
-
         return;
     }
 
@@ -2354,7 +2554,6 @@ async function saveReadingQuestion() {
         alert(
             "اكتب السؤال."
         );
-
 
         return;
     }
@@ -2370,7 +2569,6 @@ async function saveReadingQuestion() {
             "اكتب أول 3 إجابات على الأقل."
         );
 
-
         return;
     }
 
@@ -2384,7 +2582,6 @@ async function saveReadingQuestion() {
             "أنت اخترت الإجابة الرابعة كصحيحة، اكتبها أولًا."
         );
 
-
         return;
     }
 
@@ -2393,9 +2590,7 @@ async function saveReadingQuestion() {
         error
     } =
         await supabaseClient
-
             .from("reading_questions")
-
             .insert({
 
                 story_id:
@@ -2414,8 +2609,7 @@ async function saveReadingQuestion() {
                     option3,
 
                 option4:
-                    option4 ||
-                    null,
+                    option4 || null,
 
                 correct_answer:
                     correctAnswer
@@ -2435,7 +2629,6 @@ async function saveReadingQuestion() {
             "❌ حدث خطأ أثناء حفظ السؤال:\n" +
             error.message
         );
-
 
         return;
     }
@@ -2482,7 +2675,6 @@ async function saveReadingQuestion() {
 }
 
 
-
 // ==================================================
 // تحميل أسئلة القصة
 // ==================================================
@@ -2509,7 +2701,6 @@ async function loadReadingQuestions() {
         container.innerHTML =
             "اختر قصة لعرض الأسئلة.";
 
-
         return;
     }
 
@@ -2523,16 +2714,12 @@ async function loadReadingQuestions() {
         error
     } =
         await supabaseClient
-
             .from("reading_questions")
-
             .select("*")
-
             .eq(
                 "story_id",
                 Number(storyId)
             )
-
             .order(
                 "created_at",
                 {
@@ -2552,35 +2739,27 @@ async function loadReadingQuestions() {
         container.innerHTML =
             "❌ حدث خطأ أثناء تحميل الأسئلة.";
 
-
         return;
     }
 
 
-    if (
-        !data ||
-        data.length === 0
-    ) {
+    if (!data || data.length === 0) {
 
         container.innerHTML =
             "لا توجد أسئلة لهذه القصة.";
 
-
         return;
     }
 
 
-    container.innerHTML =
-        "";
+    container.innerHTML = "";
 
 
     data.forEach(
         (item, index) => {
 
             const card =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
 
             card.style.cssText = `
@@ -2624,25 +2803,20 @@ async function loadReadingQuestions() {
                 ">
 
                     1️⃣
-
                     ${escapeAdminHtml(
                         item.option1
                     )}
 
                     <br>
 
-
                     2️⃣
-
                     ${escapeAdminHtml(
                         item.option2
                     )}
 
                     <br>
 
-
                     3️⃣
-
                     ${escapeAdminHtml(
                         item.option3
                     )}
@@ -2652,9 +2826,7 @@ async function loadReadingQuestions() {
                         item.option4
                             ? `
                                 <br>
-
                                 4️⃣
-
                                 ${escapeAdminHtml(
                                     item.option4
                                 )}
@@ -2684,7 +2856,9 @@ async function loadReadingQuestions() {
                 <button
                     onclick="
                         deleteReadingQuestion(
-                            ${item.id}
+                            '${escapeAdminHtml(
+                                item.id
+                            )}'
                         )
                     "
                     style="
@@ -2705,9 +2879,7 @@ async function loadReadingQuestions() {
             `;
 
 
-            container.appendChild(
-                card
-            );
+            container.appendChild(card);
 
         }
     );
@@ -2715,14 +2887,11 @@ async function loadReadingQuestions() {
 }
 
 
-
 // ==================================================
 // حذف سؤال
 // ==================================================
 
-async function deleteReadingQuestion(
-    id
-) {
+async function deleteReadingQuestion(id) {
 
     const confirmed =
         confirm(
@@ -2737,11 +2906,8 @@ async function deleteReadingQuestion(
         error
     } =
         await supabaseClient
-
             .from("reading_questions")
-
             .delete()
-
             .eq(
                 "id",
                 id
@@ -2761,42 +2927,20 @@ async function deleteReadingQuestion(
             error.message
         );
 
-
         return;
     }
 
 
-    loadReadingQuestions();
+    await loadReadingQuestions();
 
 }
 
 
+// =========================================================
+// إضافة تصنيف
+// =========================================================
 
-// ==================================================
-// تشغيل لوحة الأدمن
-// ==================================================
-
-document.addEventListener(
-    "DOMContentLoaded",
-    async function () {
-
-        // تحميل التصنيفات أولًا
-        loadAdminCategories();
-
-
-        // تحميل القصص
-        await loadReadingStories();
-
-    }
-);
-
-
-
-// ==================================================
-// تشغيل البيانات الأساسية
-// ==================================================
-
-(async function () {
+async function saveCategory() {
 
     const isAdmin =
         await checkAdmin();
@@ -2805,9 +2949,1436 @@ document.addEventListener(
     if (!isAdmin) return;
 
 
-    await loadWords();
+    const nameArInput =
+        document.getElementById(
+            "categoryNameAr"
+        );
 
 
-    await loadAdminMessages();
+    const nameEnInput =
+        document.getElementById(
+            "categoryNameEn"
+        );
 
-})();
+
+    const iconInput =
+        document.getElementById(
+            "categoryIcon"
+        );
+
+
+    const nameAr =
+        nameArInput.value.trim();
+
+
+    const nameEn =
+        nameEnInput.value
+            .trim()
+            .toLowerCase();
+
+
+    const icon =
+        iconInput.value.trim() ||
+        "📚";
+
+
+    if (!nameAr) {
+
+        alert(
+            "⚠️ اكتب اسم التصنيف بالعربي."
+        );
+
+        nameArInput.focus();
+
+        return;
+    }
+
+
+    if (!nameEn) {
+
+        alert(
+            "⚠️ اكتب اسم التصنيف بالإنجليزي."
+        );
+
+        nameEnInput.focus();
+
+        return;
+    }
+
+
+    if (/\s/.test(nameEn)) {
+
+        alert(
+            "⚠️ اسم التصنيف بالإنجليزي لا يحتوي على مسافات.\n\nمثال: travel"
+        );
+
+        nameEnInput.focus();
+
+        return;
+    }
+
+
+    try {
+
+        const {
+            data: existingCategory,
+            error: checkError
+        } =
+            await supabaseClient
+                .from("categories")
+                .select("id")
+                .eq(
+                    "name_en",
+                    nameEn
+                )
+                .maybeSingle();
+
+
+        if (checkError) {
+
+            console.error(
+                "Category check error:",
+                checkError
+            );
+
+
+            alert(
+                "❌ حدث خطأ أثناء التحقق من التصنيف:\n" +
+                checkError.message
+            );
+
+            return;
+        }
+
+
+        const oldCategoryExists =
+
+            typeof categories !== "undefined" &&
+            Array.isArray(categories) &&
+
+            categories.some(
+                category => {
+
+                    const categoryKey =
+                        String(
+                            category.key ||
+                            category.id ||
+                            category.english ||
+                            category.name_en ||
+                            ""
+                        )
+                        .trim()
+                        .toLowerCase();
+
+
+                    return (
+                        categoryKey ===
+                        nameEn
+                    );
+
+                }
+            );
+
+
+        if (
+            existingCategory ||
+            oldCategoryExists
+        ) {
+
+            alert(
+                "⚠️ هذا التصنيف موجود بالفعل."
+            );
+
+            return;
+        }
+
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("categories")
+                .insert([{
+
+                    name_ar:
+                        nameAr,
+
+                    name_en:
+                        nameEn,
+
+                    icon:
+                        icon
+
+                }])
+                .select()
+                .single();
+
+
+        if (error) {
+
+            console.error(
+                "Save category error:",
+                error
+            );
+
+
+            alert(
+                "❌ حدث خطأ أثناء إضافة التصنيف:\n" +
+                error.message
+            );
+
+            return;
+        }
+
+
+        console.log(
+            "Category added:",
+            data
+        );
+
+
+        alert(
+            "✅ تمت إضافة التصنيف بنجاح!"
+        );
+
+
+        nameArInput.value = "";
+
+        nameEnInput.value = "";
+
+        iconInput.value = "📚";
+
+
+        await loadAdminCategories();
+
+    } catch (error) {
+
+        console.error(
+            "Unexpected save category error:",
+            error
+        );
+
+
+        alert(
+            "❌ حدث خطأ غير متوقع أثناء إضافة التصنيف."
+        );
+
+    }
+
+}
+
+
+// =========================================================
+// حذف تصنيف
+// =========================================================
+
+async function deleteCategory(categoryId) {
+
+    const isAdmin =
+        await checkAdmin();
+
+
+    if (!isAdmin) return;
+
+
+    if (!categoryId) return;
+
+
+    const confirmed =
+        confirm(
+            "هل أنت متأكد من حذف هذا التصنيف؟\n\n" +
+            "⚠️ لا تحذف تصنيفًا مستخدمًا مع كلمات."
+        );
+
+
+    if (!confirmed) return;
+
+
+    try {
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .from("categories")
+                .delete()
+                .eq(
+                    "id",
+                    categoryId
+                );
+
+
+        if (error) {
+
+            console.error(
+                "Delete category error:",
+                error
+            );
+
+
+            alert(
+                "❌ لم يتم حذف التصنيف:\n" +
+                error.message
+            );
+
+            return;
+        }
+
+
+        alert(
+            "✅ تم حذف التصنيف."
+        );
+
+
+        await loadAdminCategories();
+
+    } catch (error) {
+
+        console.error(
+            "Unexpected delete category error:",
+            error
+        );
+
+
+        alert(
+            "❌ حدث خطأ أثناء حذف التصنيف."
+        );
+
+    }
+
+}
+
+
+// =========================================================
+// 📊 تحليلات الموقع
+// =========================================================
+
+
+// ==========================================
+// تحديث رقم
+// ==========================================
+
+function setAnalyticsValue(id, value) {
+
+    const element =
+        document.getElementById(id);
+
+
+    if (!element) return;
+
+
+    element.textContent =
+        Number(value || 0)
+            .toLocaleString("ar-SA");
+
+}
+
+
+// ==========================================
+// بداية اليوم
+// ==========================================
+
+function getStartOfToday() {
+
+    const date =
+        new Date();
+
+
+    date.setHours(
+        0,
+        0,
+        0,
+        0
+    );
+
+
+    return date;
+
+}
+
+
+// ==========================================
+// أسماء الصفحات
+// ==========================================
+
+function getAnalyticsPageName(page) {
+
+    const pages = {
+
+        home:
+            "🏠 الرئيسية",
+
+        games:
+            "🎮 الألعاب",
+
+        battle:
+            "⚔️ المعركة",
+
+        learning:
+            "📚 التعلم",
+
+        reading:
+            "📖 Reading",
+
+        quiz:
+            "📝 Quiz",
+
+        chat:
+            "💬 المحادثة",
+
+        index:
+            "🏠 الرئيسية",
+
+        learn:
+            "📚 التعلم"
+
+    };
+
+
+    return (
+        pages[page] ||
+        page ||
+        "غير معروف"
+    );
+
+}
+
+
+// ==========================================
+// تنسيق التاريخ
+// ==========================================
+
+function formatAnalyticsDate(dateValue) {
+
+    if (!dateValue) {
+
+        return "—";
+
+    }
+
+
+    const date =
+        new Date(dateValue);
+
+
+    if (Number.isNaN(date.getTime())) {
+
+        return "—";
+
+    }
+
+
+    return date.toLocaleString(
+        "ar-SA",
+        {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+    );
+
+}
+
+
+// ==========================================
+// تنسيق الساعة
+// ==========================================
+
+function formatAnalyticsTime(dateValue) {
+
+    if (!dateValue) {
+
+        return "—";
+
+    }
+
+
+    const date =
+        new Date(dateValue);
+
+
+    if (Number.isNaN(date.getTime())) {
+
+        return "—";
+
+    }
+
+
+    return date.toLocaleTimeString(
+        "ar-SA",
+        {
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+    );
+
+}
+
+
+// =========================================================
+// 📊 الإحصائيات الرئيسية
+// =========================================================
+
+async function loadVisitAnalytics() {
+
+    try {
+
+        const now =
+            new Date();
+
+
+        const fiveMinutesAgo =
+            new Date(
+                now.getTime() -
+                5 * 60 * 1000
+            );
+
+
+        const onlineLimit =
+            new Date(
+                now.getTime() -
+                45 * 1000
+            );
+
+
+        // ==========================================
+        // إجمالي الزيارات
+        // ==========================================
+
+        const {
+            count: totalVisits,
+            error: totalError
+        } =
+            await supabaseClient
+                .from("user_visit_logs")
+                .select(
+                    "*",
+                    {
+                        count: "exact",
+                        head: true
+                    }
+                );
+
+
+        if (totalError) {
+
+            console.error(
+                "Total visits error:",
+                totalError
+            );
+
+        }
+
+
+        setAnalyticsValue(
+            "totalVisits",
+            totalVisits || 0
+        );
+
+
+        // ==========================================
+        // زيارات اليوم
+        // ==========================================
+
+        const {
+            count: todayVisits,
+            error: todayError
+        } =
+            await supabaseClient
+                .from("user_visit_logs")
+                .select(
+                    "*",
+                    {
+                        count: "exact",
+                        head: true
+                    }
+                )
+                .gte(
+                    "entered_at",
+                    getStartOfToday().toISOString()
+                );
+
+
+        if (todayError) {
+
+            console.error(
+                "Today visits error:",
+                todayError
+            );
+
+        }
+
+
+        setAnalyticsValue(
+            "todayVisits",
+            todayVisits || 0
+        );
+
+
+        // ==========================================
+        // دخلوا خلال آخر 5 دقائق
+        // ==========================================
+
+        const {
+            data: recentData,
+            error: recentError
+        } =
+            await supabaseClient
+                .from("user_visit_logs")
+                .select(
+                    "user_id, entered_at, last_seen"
+                )
+                .gte(
+                    "entered_at",
+                    fiveMinutesAgo.toISOString()
+                );
+
+
+        if (recentError) {
+
+            console.error(
+                "Recent visits error:",
+                recentError
+            );
+
+        }
+
+
+        const recentUsers =
+            new Set();
+
+
+        (recentData || []).forEach(
+            item => {
+
+                if (item.user_id) {
+
+                    recentUsers.add(
+                        String(
+                            item.user_id
+                        )
+                    );
+
+                }
+
+            }
+        );
+
+
+        setAnalyticsValue(
+            "recentUsers",
+            recentUsers.size
+        );
+
+
+        // ==========================================
+        // المتصلون الآن
+        // ==========================================
+
+        const {
+            data: onlineData,
+            error: onlineError
+        } =
+            await supabaseClient
+                .from("user_presence")
+                .select(
+                    "user_id, page, last_seen"
+                )
+                .gte(
+                    "last_seen",
+                    fiveMinutesAgo.toISOString()
+                );
+
+
+        if (onlineError) {
+
+            console.error(
+                "Online presence error:",
+                onlineError
+            );
+
+        }
+
+
+        const onlineUsers =
+            new Set();
+
+
+        (onlineData || []).forEach(
+            item => {
+
+                if (
+                    item.user_id &&
+                    item.last_seen &&
+                    new Date(
+                        item.last_seen
+                    ) >= onlineLimit
+                ) {
+
+                    onlineUsers.add(
+                        String(
+                            item.user_id
+                        )
+                    );
+
+                }
+
+            }
+        );
+
+
+        setAnalyticsValue(
+            "onlineUsers",
+            onlineUsers.size
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Visit analytics error:",
+            error
+        );
+
+    }
+
+}
+
+
+// =========================================================
+// 👥 جدول المستخدمين
+// =========================================================
+
+async function loadAnalyticsUsers() {
+
+    const table =
+        document.getElementById(
+            "analyticsUsersTable"
+        );
+
+
+    if (!table) return;
+
+
+    const now =
+        new Date();
+
+
+    // متصل الآن = آخر نشاط خلال 45 ثانية
+    const onlineLimit =
+        new Date(
+            now.getTime() -
+            45 * 1000
+        );
+
+
+    // آخر 5 دقائق
+    const fiveMinutesAgo =
+        new Date(
+            now.getTime() -
+            5 * 60 * 1000
+        );
+
+
+    table.innerHTML = `
+
+        <tr>
+
+            <td
+                colspan="5"
+                style="
+                    padding:25px;
+                    text-align:center;
+                    color:#888;
+                "
+            >
+
+                ⏳ جاري تحميل نشاط المستخدمين...
+
+            </td>
+
+        </tr>
+
+    `;
+
+
+    try {
+
+        // ==========================================
+        // جلب سجلات الزيارات
+        // ==========================================
+
+        const {
+            data: visits,
+            error: visitsError
+        } =
+            await supabaseClient
+                .from("user_visit_logs")
+                .select(
+                    "id, user_id, page, entered_at, last_seen"
+                )
+                .order(
+                    "last_seen",
+                    {
+                        ascending: false
+                    }
+                )
+                .limit(100);
+
+
+        if (visitsError) {
+
+            console.error(
+                "Visit logs error:",
+                visitsError
+            );
+
+
+            table.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="5"
+                        style="
+                            padding:25px;
+                            text-align:center;
+                            color:#d93636;
+                        "
+                    >
+
+                        ❌ حدث خطأ أثناء تحميل سجل الزيارات.
+
+                        <br><br>
+
+                        <small>
+                            ${escapeAdminHtml(
+                                visitsError.message
+                            )}
+                        </small>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+            return;
+
+        }
+
+
+        const visitRows =
+            visits || [];
+
+
+        if (visitRows.length === 0) {
+
+            table.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="5"
+                        style="
+                            padding:25px;
+                            text-align:center;
+                            color:#888;
+                        "
+                    >
+
+                        لا توجد زيارات حتى الآن.
+
+                    </td>
+
+                </tr>
+
+            `;
+
+            return;
+
+        }
+
+
+        // ==========================================
+        // جلب IDs المستخدمين
+        // ==========================================
+
+        const userIds =
+            [
+                ...new Set(
+                    visitRows
+                        .map(
+                            item =>
+                                item.user_id
+                        )
+                        .filter(Boolean)
+                        .map(
+                            id =>
+                                String(id)
+                        )
+                )
+            ];
+
+
+        // ==========================================
+        // جلب أسماء المستخدمين
+        // ==========================================
+
+        const profilesMap =
+            new Map();
+
+
+        if (userIds.length > 0) {
+
+            const {
+                data: profiles,
+                error: profilesError
+            } =
+                await supabaseClient
+                    .from("profiles")
+                    .select(
+                        "id, display_name"
+                    )
+                    .in(
+                        "id",
+                        userIds
+                    );
+
+
+            if (profilesError) {
+
+                console.error(
+                    "Profiles analytics error:",
+                    profilesError
+                );
+
+            } else {
+
+                (profiles || []).forEach(
+                    profile => {
+
+                        profilesMap.set(
+                            String(
+                                profile.id
+                            ),
+                            profile.display_name ||
+                            "بدون اسم"
+                        );
+
+                    }
+                );
+
+            }
+
+        }
+
+
+        // ==========================================
+        // تنظيف الجدول
+        // ==========================================
+
+        table.innerHTML = "";
+
+
+        // ==========================================
+        // عرض السجلات
+        // ==========================================
+
+        visitRows.forEach(
+            visit => {
+
+                const userId =
+                    String(
+                        visit.user_id || ""
+                    );
+
+
+                const username =
+                    profilesMap.get(
+                        userId
+                    ) ||
+                    "مستخدم";
+
+
+                if (!visit.last_seen) {
+
+                    return;
+
+                }
+
+
+                const lastSeen =
+                    new Date(
+                        visit.last_seen
+                    );
+
+
+                // ==========================================
+                // الحالة
+                // ==========================================
+
+                let statusHtml = "";
+
+
+                if (
+                    lastSeen >=
+                    onlineLimit
+                ) {
+
+                    statusHtml = `
+
+                        <span
+                            style="
+                                display:inline-flex;
+                                align-items:center;
+                                gap:5px;
+                                background:#e9f9ef;
+                                color:#20855a;
+                                padding:6px 10px;
+                                border-radius:8px;
+                                font-size:12px;
+                                font-weight:bold;
+                                white-space:nowrap;
+                            "
+                        >
+
+                            🟢 متصل الآن
+
+                        </span>
+
+                    `;
+
+                } else if (
+                    lastSeen >=
+                    fiveMinutesAgo
+                ) {
+
+                    statusHtml = `
+
+                        <span
+                            style="
+                                display:inline-flex;
+                                align-items:center;
+                                gap:5px;
+                                background:#fff7df;
+                                color:#a56b00;
+                                padding:6px 10px;
+                                border-radius:8px;
+                                font-size:12px;
+                                font-weight:bold;
+                                white-space:nowrap;
+                            "
+                        >
+
+                            🕐 آخر 5 دقائق
+
+                        </span>
+
+                    `;
+
+                } else {
+
+                    statusHtml = `
+
+                        <span
+                            style="
+                                display:inline-flex;
+                                align-items:center;
+                                gap:5px;
+                                background:#f1f2f5;
+                                color:#777;
+                                padding:6px 10px;
+                                border-radius:8px;
+                                font-size:12px;
+                                white-space:nowrap;
+                            "
+                        >
+
+                            ⚪ غير متصل
+
+                        </span>
+
+                    `;
+
+                }
+
+
+                const row =
+                    document.createElement("tr");
+
+
+                row.style.borderBottom =
+                    "1px solid #edf0f5";
+
+
+                row.innerHTML = `
+
+                    <!-- المستخدم -->
+
+                    <td
+                        style="
+                            padding:13px;
+                            font-weight:bold;
+                        "
+                    >
+
+                        👤
+
+                        ${escapeAdminHtml(
+                            username
+                        )}
+
+                    </td>
+
+
+                    <!-- الصفحة -->
+
+                    <td
+                        style="
+                            padding:13px;
+                        "
+                    >
+
+                        ${escapeAdminHtml(
+                            getAnalyticsPageName(
+                                visit.page
+                            )
+                        )}
+
+                    </td>
+
+
+                    <!-- دخل الساعة -->
+
+                    <td
+                        style="
+                            padding:13px;
+                            color:#666;
+                            font-size:13px;
+                            white-space:nowrap;
+                        "
+                    >
+
+                        ${escapeAdminHtml(
+                            formatAnalyticsTime(
+                                visit.entered_at
+                            )
+                        )}
+
+                    </td>
+
+
+                    <!-- آخر نشاط -->
+
+                    <td
+                        style="
+                            padding:13px;
+                            color:#666;
+                            font-size:13px;
+                            white-space:nowrap;
+                        "
+                    >
+
+                        ${escapeAdminHtml(
+                            formatAnalyticsTime(
+                                visit.last_seen
+                            )
+                        )}
+
+                    </td>
+
+
+                    <!-- الحالة -->
+
+                    <td
+                        style="
+                            padding:13px;
+                        "
+                    >
+
+                        ${statusHtml}
+
+                    </td>
+
+                `;
+
+
+                table.appendChild(row);
+
+            }
+        );
+
+
+        // ==========================================
+        // إذا لم ينتج أي صف
+        // ==========================================
+
+        if (
+            table.children.length === 0
+        ) {
+
+            table.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="5"
+                        style="
+                            padding:25px;
+                            text-align:center;
+                            color:#888;
+                        "
+                    >
+
+                        لا توجد بيانات نشاط.
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Analytics users unexpected error:",
+            error
+        );
+
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="5"
+                    style="
+                        padding:25px;
+                        text-align:center;
+                        color:#d93636;
+                    "
+                >
+
+                    ❌ حدث خطأ غير متوقع أثناء تحميل المستخدمين.
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+}
+
+
+// =========================================================
+// 📊 تحميل التحليلات كلها
+// =========================================================
+
+async function loadAnalytics() {
+
+    try {
+
+        await Promise.all([
+
+            loadVisitAnalytics(),
+
+            loadAnalyticsUsers()
+
+        ]);
+
+
+        const update =
+            document.getElementById(
+                "analyticsLastUpdate"
+            );
+
+
+        if (update) {
+
+            update.textContent =
+                "آخر تحديث: " +
+                new Date().toLocaleTimeString(
+                    "ar-SA",
+                    {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit"
+                    }
+                );
+
+        }
+
+
+        const errorBox =
+            document.getElementById(
+                "analyticsError"
+            );
+
+
+        if (errorBox) {
+
+            errorBox.style.display =
+                "none";
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Analytics error:",
+            error
+        );
+
+
+        const errorBox =
+            document.getElementById(
+                "analyticsError"
+            );
+
+
+        if (errorBox) {
+
+            errorBox.textContent =
+                "حدث خطأ أثناء تحميل التحليلات.";
+
+            errorBox.style.display =
+                "block";
+
+        }
+
+    }
+
+}
+
+
+// =========================================================
+// 🔄 تحديث التحليلات يدويًا
+// =========================================================
+
+async function refreshAnalytics() {
+
+    const button =
+        document.getElementById(
+            "refreshAnalyticsBtn"
+        );
+
+
+    const update =
+        document.getElementById(
+            "analyticsLastUpdate"
+        );
+
+
+    if (
+        button &&
+        button.disabled
+    ) {
+
+        return;
+
+    }
+
+
+    if (button) {
+
+        button.disabled = true;
+
+        button.textContent =
+            "⏳ جاري التحديث...";
+
+        button.style.opacity =
+            "0.7";
+
+        button.style.cursor =
+            "wait";
+
+    }
+
+
+    if (update) {
+
+        update.textContent =
+            "⏳ جاري التحديث...";
+
+    }
+
+
+    try {
+
+        await loadAnalytics();
+
+    } catch (error) {
+
+        console.error(
+            "Manual analytics refresh error:",
+            error
+        );
+
+    } finally {
+
+        if (button) {
+
+            button.disabled = false;
+
+            button.textContent =
+                "🔄 تحديث";
+
+            button.style.opacity =
+                "";
+
+            button.style.cursor =
+                "";
+
+        }
+
+    }
+
+}
+
+
+// =========================================================
+// تشغيل التحليلات
+// =========================================================
+
+async function startAnalytics() {
+
+    await loadAnalytics();
+
+}
+
+
+// =========================================================
+// تشغيل لوحة الأدمن
+// =========================================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async function () {
+
+        const isAdmin =
+            await checkAdmin();
+
+
+        if (!isAdmin) return;
+
+
+        await loadAdminCategories();
+
+        await loadWords();
+
+        await loadAdminMessages();
+
+        await loadReadingStories();
+
+        await startAnalytics();
+
+    }
+);
+

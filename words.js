@@ -1,4 +1,3 @@
-
 // ==========================================
 // المتغيرات
 // ==========================================
@@ -30,7 +29,8 @@ async function loadWords() {
     const {
         data: { user },
         error: userError
-    } = await supabaseClient.auth.getUser();
+    } =
+        await supabaseClient.auth.getUser();
 
 
     // لازم يكون مسجل دخول
@@ -47,6 +47,10 @@ async function loadWords() {
         return;
     }
 
+
+    // ==========================================
+    // جلب الكلمات
+    // ==========================================
 
     const {
         data,
@@ -112,7 +116,9 @@ async function loadWords() {
     }
 
 
+    // ==========================================
     // تحميل أول كلمة
+    // ==========================================
 
     loadWord();
 
@@ -142,27 +148,31 @@ function loadWord() {
         );
 
 
-    if (word.image) {
+    if (imageBox) {
 
-        imageBox.innerHTML = `
+        if (word.image) {
 
-            <img
-                src="${word.image}"
-                alt="${word.english || ""}"
-                style="
-                    width:100%;
-                    height:100%;
-                    object-fit:contain;
-                    border-radius:20px;
-                "
-            >
+            imageBox.innerHTML = `
 
-        `;
+                <img
+                    src="${word.image}"
+                    alt="${word.english || ""}"
+                    style="
+                        width:100%;
+                        height:100%;
+                        object-fit:contain;
+                        border-radius:20px;
+                    "
+                >
 
-    } else {
+            `;
 
-        imageBox.textContent =
-            word.emoji || "🖼️";
+        } else {
+
+            imageBox.textContent =
+                word.emoji || "🖼️";
+
+        }
 
     }
 
@@ -172,10 +182,18 @@ function loadWord() {
     // الإنجليزية
     // ==========================================
 
-    document.getElementById(
-        "englishWord"
-    ).textContent =
-        word.english || "";
+    const englishElement =
+        document.getElementById(
+            "englishWord"
+        );
+
+
+    if (englishElement) {
+
+        englishElement.textContent =
+            word.english || "";
+
+    }
 
 
 
@@ -183,10 +201,42 @@ function loadWord() {
     // العربية
     // ==========================================
 
-    document.getElementById(
-        "arabicWord"
-    ).textContent =
-        word.arabic || "";
+    const arabicElement =
+        document.getElementById(
+            "arabicWord"
+        );
+
+
+    if (arabicElement) {
+
+        arabicElement.textContent =
+            word.arabic || "";
+
+        // إخفاء الترجمة مع كل كلمة جديدة
+
+        arabicElement.style.display =
+            "none";
+
+    }
+
+
+
+    // ==========================================
+    // إعادة زر الترجمة
+    // ==========================================
+
+    const translationButton =
+        document.getElementById(
+            "translationToggle"
+        );
+
+
+    if (translationButton) {
+
+        translationButton.innerHTML =
+            "👁️ إظهار الترجمة";
+
+    }
 
 
 
@@ -194,16 +244,32 @@ function loadWord() {
     // المثال
     // ==========================================
 
-    document.getElementById(
-        "exampleText"
-    ).textContent =
-        word.example || "";
+    const exampleElement =
+        document.getElementById(
+            "exampleText"
+        );
 
 
-    document.getElementById(
-        "exampleArabic"
-    ).textContent =
-        word.exampleArabic || "";
+    if (exampleElement) {
+
+        exampleElement.textContent =
+            word.example || "";
+
+    }
+
+
+    const exampleArabicElement =
+        document.getElementById(
+            "exampleArabic"
+        );
+
+
+    if (exampleArabicElement) {
+
+        exampleArabicElement.textContent =
+            word.exampleArabic || "";
+
+    }
 
 
 
@@ -215,22 +281,38 @@ function loadWord() {
         currentIndex + 1;
 
 
-    document.getElementById(
-        "progressText"
-    ).textContent =
-        number +
-        " / " +
-        words.length;
+    const progressText =
+        document.getElementById(
+            "progressText"
+        );
+
+
+    if (progressText) {
+
+        progressText.textContent =
+            number +
+            " / " +
+            words.length;
+
+    }
 
 
     const percent =
         (number / words.length) * 100;
 
 
-    document.getElementById(
-        "progressFill"
-    ).style.width =
-        percent + "%";
+    const progressFill =
+        document.getElementById(
+            "progressFill"
+        );
+
+
+    if (progressFill) {
+
+        progressFill.style.width =
+            percent + "%";
+
+    }
 
 
 
@@ -274,9 +356,76 @@ function loadWord() {
     }
 
 
+    // ==========================================
     // التأكد هل الكلمة محفوظة
+    // ==========================================
 
     checkFavorite();
+
+}
+
+
+// ==========================================
+// إظهار / إخفاء الترجمة
+// ==========================================
+
+function toggleTranslation() {
+
+    const arabicWord =
+        document.getElementById(
+            "arabicWord"
+        );
+
+
+    const translationButton =
+        document.getElementById(
+            "translationToggle"
+        );
+
+
+    if (
+        !arabicWord ||
+        !translationButton
+    ) {
+
+        return;
+
+    }
+
+
+    // ==========================================
+    // الترجمة مخفية
+    // ==========================================
+
+    if (
+        arabicWord.style.display ===
+        "none"
+    ) {
+
+        arabicWord.style.display =
+            "block";
+
+
+        translationButton.innerHTML =
+            "🙈 إخفاء الترجمة";
+
+
+    }
+
+    // ==========================================
+    // الترجمة ظاهرة
+    // ==========================================
+
+    else {
+
+        arabicWord.style.display =
+            "none";
+
+
+        translationButton.innerHTML =
+            "👁️ إظهار الترجمة";
+
+    }
 
 }
 
@@ -291,7 +440,14 @@ async function checkFavorite() {
         words[currentIndex];
 
 
-    if (!word || !word.id) return;
+    if (
+        !word ||
+        !word.id
+    ) {
+
+        return;
+
+    }
 
 
     const {
@@ -336,6 +492,7 @@ async function checkFavorite() {
         );
 
         return;
+
     }
 
 
@@ -377,7 +534,14 @@ function speakWord() {
         words[currentIndex];
 
 
-    if (!word || !word.english) return;
+    if (
+        !word ||
+        !word.english
+    ) {
+
+        return;
+
+    }
 
 
     if (
@@ -389,6 +553,7 @@ function speakWord() {
         );
 
         return;
+
     }
 
 
@@ -430,13 +595,17 @@ function speakExample() {
         words[currentIndex];
 
 
-    if (!word || !word.example) {
+    if (
+        !word ||
+        !word.example
+    ) {
 
         alert(
             "⚠️ لا توجد جملة لهذه الكلمة."
         );
 
         return;
+
     }
 
 
@@ -449,6 +618,7 @@ function speakExample() {
         );
 
         return;
+
     }
 
 
@@ -490,13 +660,17 @@ function speakExampleSlow() {
         words[currentIndex];
 
 
-    if (!word || !word.example) {
+    if (
+        !word ||
+        !word.example
+    ) {
 
         alert(
             "⚠️ لا توجد جملة لهذه الكلمة."
         );
 
         return;
+
     }
 
 
@@ -509,6 +683,7 @@ function speakExampleSlow() {
         );
 
         return;
+
     }
 
 
@@ -550,9 +725,13 @@ async function answer(known) {
         words[currentIndex];
 
 
-    if (!word || !word.id) {
+    if (
+        !word ||
+        !word.id
+    ) {
 
         return;
+
     }
 
 
@@ -569,7 +748,10 @@ async function answer(known) {
             .getUser();
 
 
-    if (userError || !user) {
+    if (
+        userError ||
+        !user
+    ) {
 
         alert(
             "⚠️ يجب تسجيل الدخول أولاً."
@@ -579,6 +761,7 @@ async function answer(known) {
             "login.html";
 
         return;
+
     }
 
 
@@ -599,16 +782,20 @@ async function answer(known) {
                 .upsert(
 
                     {
+
                         user_id:
                             user.id,
 
                         word_id:
                             String(word.id)
+
                     },
 
                     {
+
                         onConflict:
                             "user_id,word_id"
+
                     }
 
                 );
@@ -621,22 +808,26 @@ async function answer(known) {
                 learnedError
             );
 
+
             alert(
                 "❌ خطأ Supabase:\n\n" +
+
                 "Code: " +
                 (learnedError.code || "") +
-                "\n\n" +
-                "Message: " +
+
+                "\n\nMessage: " +
                 (learnedError.message || "") +
-                "\n\n" +
-                "Details: " +
+
+                "\n\nDetails: " +
                 (learnedError.details || "") +
-                "\n\n" +
-                "Hint: " +
+
+                "\n\nHint: " +
                 (learnedError.hint || "")
             );
 
+
             return;
+
         }
 
     }
@@ -679,16 +870,21 @@ async function answer(known) {
                 checkError
             );
 
+
             alert(
                 "❌ حدث خطأ أثناء التحقق من كلمة المراجعة:\n" +
                 checkError.message
             );
 
+
             return;
+
         }
 
 
+        // ==========================================
         // إذا غير موجودة، أضفها
+        // ==========================================
 
         if (!existing) {
 
@@ -721,12 +917,15 @@ async function answer(known) {
                     insertError
                 );
 
+
                 alert(
                     "❌ حدث خطأ أثناء حفظ الكلمة للمراجعة:\n" +
                     insertError.message
                 );
 
+
                 return;
+
             }
 
         }
@@ -769,7 +968,10 @@ async function toggleFavorite() {
             .getUser();
 
 
-    if (userError || !user) {
+    if (
+        userError ||
+        !user
+    ) {
 
         alert(
             "⚠️ يجب تسجيل الدخول أولاً."
@@ -779,6 +981,7 @@ async function toggleFavorite() {
             "login.html";
 
         return;
+
     }
 
 
@@ -786,13 +989,17 @@ async function toggleFavorite() {
         words[currentIndex];
 
 
-    if (!word || !word.id) {
+    if (
+        !word ||
+        !word.id
+    ) {
 
         alert(
             "⚠️ لا يمكن حفظ هذه الكلمة."
         );
 
         return;
+
     }
 
 
@@ -827,27 +1034,35 @@ async function toggleFavorite() {
 
             console.error(error);
 
+
             alert(
                 "❌ حدث خطأ أثناء إزالة الكلمة."
             );
 
+
             return;
+
         }
 
 
         favorite = false;
 
 
-        button.classList.remove(
-            "active"
-        );
+        if (button) {
+
+            button.classList.remove(
+                "active"
+            );
 
 
-        button.innerHTML =
-            "☆ <span>حفظ</span>";
+            button.innerHTML =
+                "☆ <span>حفظ</span>";
+
+        }
 
 
         return;
+
     }
 
 
@@ -890,16 +1105,21 @@ async function toggleFavorite() {
             favorite = true;
 
 
-            button.classList.add(
-                "active"
-            );
+            if (button) {
+
+                button.classList.add(
+                    "active"
+                );
 
 
-            button.innerHTML =
-                "★ <span>محفوظة</span>";
+                button.innerHTML =
+                    "★ <span>محفوظة</span>";
+
+            }
 
 
             return;
+
         }
 
 
@@ -910,26 +1130,32 @@ async function toggleFavorite() {
             "❌ حدث خطأ أثناء حفظ الكلمة."
         );
 
+
         return;
+
     }
 
 
     favorite = true;
 
 
-    button.classList.add(
-        "active"
-    );
+    if (button) {
+
+        button.classList.add(
+            "active"
+        );
 
 
-    button.innerHTML =
-        "★ <span>محفوظة</span>";
+        button.innerHTML =
+            "★ <span>محفوظة</span>";
+
+    }
 
 }
 
 
 // ==========================================
-// التالي
+// الكلمة التالية
 // ==========================================
 
 function nextWord() {
@@ -943,7 +1169,9 @@ function nextWord() {
 
         loadWord();
 
-    } else {
+    }
+
+    else {
 
         alert(
             "🎉 أحسنت! أنهيت كلمات هذا التصنيف."
@@ -989,4 +1217,3 @@ function goHome() {
 // ==========================================
 
 loadWords();
-

@@ -1,8 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
 <head>
+
+<meta name="google-adsense-account" content="ca-pub-3809987460267480">
 
 <meta charset="UTF-8">
 
@@ -17,28 +18,28 @@
 <script src="supabase.js"></script>
 
 
+
+<script src="presence.js"></script>
+
+
+
+
+
 <script>
-    // ==========================================
-    // التحقق من تسجيل الدخول قبل عرض الصفحة
-    // ==========================================
+(async function checkLogin() {
 
-    (async function checkLogin() {
+    const {
+        data: { user },
+        error
+    } = await supabaseClient.auth.getUser();
 
-        const {
-            data: { user },
-            error
-        } = await supabaseClient.auth.getUser();
+    if (error || !user) {
+        window.location.replace("login.html");
+        return;
+    }
 
-        if (error || !user) {
-
-            window.location.replace("login.html");
-
-            return;
-        }
-
-    })();
+})();
 </script>
-
 
 <style>
 
@@ -57,932 +58,616 @@ button {
     font-family: inherit;
 }
 
-
 /* ==================================================
    الصفحة
 ================================================== */
 
 .app-page {
-
     width: 100%;
     max-width: 600px;
-
     margin: auto;
-
     min-height: 100vh;
-
     padding: 20px 18px 105px;
 }
-
 
 /* ==================================================
    الهيدر
 ================================================== */
 
 .new-header {
-
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
-
     margin-bottom: 22px;
 }
 
-
 .user-area {
-
     display: flex;
-
     align-items: center;
-
     gap: 12px;
 }
 
-
 .avatar-new {
-
     width: 58px;
     height: 58px;
-
     border-radius: 50%;
-
-    background: linear-gradient(
-        135deg,
-        #7667f5,
-        #5b4ee8
-    );
-
+    background: linear-gradient(135deg, #7667f5, #5b4ee8);
     color: white;
-
     display: flex;
-
     align-items: center;
     justify-content: center;
-
     font-size: 23px;
     font-weight: bold;
-
     overflow: hidden;
 }
 
-
 .user-info strong {
-
     display: block;
-
     font-size: 19px;
-
     margin-bottom: 5px;
 }
 
-
 .user-info small {
-
     color: #888;
-
     font-size: 13px;
 }
 
-
 .header-actions {
-
     display: flex;
-
     gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
 }
 
-
 .header-icon {
-
     width: 45px;
     height: 45px;
-
     border: none;
-
     background: white;
-
     border-radius: 50%;
-
     font-size: 22px;
-
     cursor: pointer;
-
     box-shadow: 0 3px 12px rgba(0,0,0,.07);
-
     position: relative;
 }
 
-
 .notification-number {
-
     position: absolute;
-
     top: -2px;
     right: -2px;
-
     background: #ef3f58;
-
     color: white;
-
     min-width: 19px;
     height: 19px;
-
     border-radius: 20px;
-
     font-size: 11px;
-
     display: flex;
-
     align-items: center;
     justify-content: center;
 }
-
 
 /* ==================================================
    بانر التعلم
 ================================================== */
 
 .learning-banner {
-
     position: relative;
-
     min-height: 190px;
-
     border-radius: 25px;
-
     overflow: hidden;
-
     padding: 25px;
-
     margin-bottom: 18px;
-
-    background:
-        linear-gradient(
-            120deg,
-            #6254eb,
-            #8374ed
-        );
-
+    background: linear-gradient(120deg, #6254eb, #8374ed);
     color: white;
-
-    box-shadow:
-        0 10px 25px rgba(98,84,235,.22);
+    box-shadow: 0 10px 25px rgba(98,84,235,.22);
 }
 
-
 .learning-banner h1 {
-
     margin: 0 0 10px;
-
     font-size: 27px;
 }
 
-
 .learning-banner p {
-
     margin: 0;
-
     line-height: 1.8;
-
     font-size: 14px;
-
     opacity: .9;
-
     max-width: 230px;
 }
 
-
 .start-learning-btn {
-
     border: none;
-
     background: white;
-
     color: #5d52dc;
-
     padding: 12px 20px;
-
     border-radius: 25px;
-
     font-size: 15px;
-
     font-weight: bold;
-
     margin-top: 18px;
-
     cursor: pointer;
-
     box-shadow: 0 5px 15px rgba(0,0,0,.12);
 }
 
-
 .books-decoration {
-
     position: absolute;
-
     left: 15px;
     bottom: 12px;
-
     font-size: 75px;
-
     transform: rotate(-4deg);
 }
-
 
 /* ==================================================
    العناوين
 ================================================== */
 
 .section-title {
-
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
-
     margin: 22px 4px 12px;
 }
 
-
 .section-title h2 {
-
     margin: 0;
-
     font-size: 18px;
 }
 
-
 .section-title button {
-
     border: none;
-
     background: transparent;
-
     color: #5c51dc;
-
     font-weight: bold;
-
     cursor: pointer;
 }
-
 
 /* ==================================================
    بطاقة التقدم
 ================================================== */
 
 .progress-card {
-
     background: white;
-
     border-radius: 22px;
-
     padding: 20px 10px;
-
     display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    box-shadow:
-        0 4px 18px rgba(0,0,0,.06);
+    grid-template-columns: repeat(3, 1fr);
+    box-shadow: 0 4px 18px rgba(0,0,0,.06);
 }
 
-
 .stat {
-
     text-align: center;
-
     border-left: 1px solid #eeeeee;
 }
 
-
 .stat:last-child {
-
     border-left: none;
 }
 
-
 .stat-icon {
-
     font-size: 25px;
-
     margin-bottom: 8px;
 }
 
-
 .stat-number {
-
     display: block;
-
     font-size: 21px;
-
     font-weight: bold;
-
     margin-bottom: 5px;
 }
 
-
 .stat-label {
-
     color: #8a8a94;
-
     font-size: 12px;
 }
-
 
 /* ==================================================
    تحدي اليوم
 ================================================== */
 
 .challenge-card {
-
-    background:
-        linear-gradient(
-            110deg,
-            #fff8ee,
-            #fffdf8
-        );
-
+    background: linear-gradient(110deg, #fff8ee, #fffdf8);
     border-radius: 20px;
-
     padding: 17px;
-
     display: flex;
-
     align-items: center;
-
     gap: 14px;
-
-    box-shadow:
-        0 3px 15px rgba(0,0,0,.04);
+    box-shadow: 0 3px 15px rgba(0,0,0,.04);
 }
 
-
 .challenge-icon {
-
     width: 62px;
     height: 62px;
-
     border-radius: 18px;
-
     background: #fff;
-
     display: flex;
-
     align-items: center;
     justify-content: center;
-
     font-size: 35px;
 }
 
-
 .challenge-content {
-
     flex: 1;
 }
 
-
 .challenge-content strong {
-
     display: block;
-
     color: #d87720;
-
     margin-bottom: 9px;
 }
 
-
 .challenge-progress {
-
     width: 100%;
-
     height: 8px;
-
     background: #eadfcf;
-
     border-radius: 20px;
-
     overflow: hidden;
-
     margin-bottom: 7px;
 }
 
-
 .challenge-fill {
-
     height: 100%;
-
     width: 0%;
-
     background: #f3a516;
-
     border-radius: 20px;
-
     transition: .4s;
 }
 
-
 .challenge-count {
-
     color: #888;
-
     font-size: 12px;
 }
 
+/* ==================================================
+   🎧 بطاقة اسمع واختر
+================================================== */
+
+.listen-page-card {
+    width: 100%;
+    border: none;
+    border-radius: 22px;
+    padding: 20px;
+    background: linear-gradient(120deg, #6254eb, #8374ed);
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+    text-align: right;
+    box-shadow: 0 8px 20px rgba(98,84,235,.18);
+    transition: .15s;
+}
+
+.listen-page-card:active {
+    transform: scale(.98);
+}
+
+.listen-page-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 18px;
+    background: rgba(255,255,255,.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 31px;
+    flex-shrink: 0;
+}
+
+.listen-page-content {
+    flex: 1;
+}
+
+.listen-page-content strong {
+    display: block;
+    font-size: 17px;
+    margin-bottom: 6px;
+}
+
+.listen-page-content span {
+    font-size: 12px;
+    opacity: .9;
+}
+
+.listen-page-arrow {
+    font-size: 25px;
+}
 
 /* ==================================================
    الأقسام الرئيسية
 ================================================== */
 
 .main-grid {
-
     display: grid;
-
-    grid-template-columns:
-        repeat(2, 1fr);
-
+    grid-template-columns: repeat(2, 1fr);
     gap: 12px;
 }
 
-
 .main-card-new {
-
     border: none;
-
     border-radius: 20px;
-
     padding: 18px;
-
     min-height: 105px;
-
     text-align: right;
-
     cursor: pointer;
-
     display: flex;
-
     align-items: center;
-
     gap: 12px;
-
     transition: transform .15s;
 }
 
-
 .main-card-new:active {
-
     transform: scale(.97);
 }
 
-
 .main-card-new .icon {
-
     width: 53px;
     height: 53px;
-
     border-radius: 17px;
-
     display: flex;
-
     align-items: center;
     justify-content: center;
-
     font-size: 28px;
-
     flex-shrink: 0;
 }
 
-
 .main-card-new h3 {
-
     margin: 0 0 6px;
-
     font-size: 16px;
 }
 
-
 .main-card-new p {
-
     margin: 0;
-
     color: #888;
-
     font-size: 12px;
 }
 
-
 .card-learning {
-
     background: #e4f9ef;
 }
 
-
 .card-learning .icon {
-
     background: #c9f2df;
 }
 
-
 .card-quiz {
-
     background: #eaf3ff;
 }
 
-
 .card-quiz .icon {
-
     background: #d8e9ff;
 }
 
-
 .card-review {
-
     background: #fff0f6;
 }
 
-
 .card-review .icon {
-
     background: #ffddea;
 }
 
-
 .card-chat {
-
     background: #f0edff;
 }
 
-
 .card-chat .icon {
-
     background: #e1dcff;
 }
 
-
-/* ==================================================
-   القراءة Reading
-================================================== */
-
 .card-reading {
-
     background: #fff4df;
 }
 
-
 .card-reading .icon {
-
     background: #ffe5b3;
 }
 
+.card-ai {
+    background: #eaf9ff;
+}
+
+.card-ai .icon {
+    background: #d6f2ff;
+}
 
 /* ==================================================
    الكلمات المحفوظة
 ================================================== */
 
 .saved-list {
-
     display: flex;
-
     gap: 10px;
-
     overflow-x: auto;
-
     padding: 3px 2px 10px;
-
     scrollbar-width: none;
 }
 
-
 .saved-list::-webkit-scrollbar {
-
     display: none;
 }
 
-
 .saved-word {
-
     flex: 0 0 96px;
-
     min-height: 120px;
-
     background: white;
-
     border-radius: 16px;
-
     padding: 9px;
-
     text-align: center;
-
     border: 1px solid #eeeeee;
-
-    box-shadow:
-        0 3px 10px rgba(0,0,0,.04);
-
+    box-shadow: 0 3px 10px rgba(0,0,0,.04);
     position: relative;
 }
 
-
 .saved-word .star {
-
     position: absolute;
-
     top: 5px;
     right: 6px;
-
     font-size: 15px;
 }
 
-
 .saved-word .saved-image {
-
     width: 55px;
     height: 55px;
-
     margin: auto auto 5px;
-
     border-radius: 12px;
-
     overflow: hidden;
-
     display: flex;
-
     align-items: center;
     justify-content: center;
-
     background: #f5f5f8;
-
     font-size: 30px;
 }
 
-
 .saved-word img {
-
     width: 100%;
     height: 100%;
-
     object-fit: contain;
 }
 
-
 .saved-word strong {
-
     display: block;
-
     font-size: 13px;
-
     margin-bottom: 3px;
 }
 
-
 .saved-word small {
-
     color: #888;
-
     font-size: 11px;
 }
-
 
 /* ==================================================
    الشريط السفلي
 ================================================== */
 
 .bottom-nav {
-
     position: fixed;
-
     z-index: 5000;
-
     bottom: 10px;
-
     left: 50%;
-
     transform: translateX(-50%);
-
     width: calc(100% - 24px);
-
     max-width: 570px;
-
     height: 74px;
-
     background: rgba(255,255,255,.96);
-
     border-radius: 25px;
-
-    box-shadow:
-        0 8px 30px rgba(0,0,0,.12);
-
+    box-shadow: 0 8px 30px rgba(0,0,0,.12);
     display: grid;
-
-    grid-template-columns:
-        repeat(5, 1fr);
-
+    grid-template-columns: repeat(5, 1fr);
     align-items: center;
-
     padding: 6px;
 }
 
-
 .bottom-nav button {
-
     height: 62px;
-
     border: none;
-
     background: transparent;
-
     color: #9696a0;
-
     cursor: pointer;
-
     border-radius: 22px;
-
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
     justify-content: center;
-
     gap: 3px;
-
     font-size: 21px;
 }
 
-
 .bottom-nav button span {
-
     font-size: 10px;
 }
 
-
 .bottom-nav .active {
-
-    background:
-        linear-gradient(
-            145deg,
-            #7669f3,
-            #5b4ee8
-        );
-
+    background: linear-gradient(145deg, #7669f3, #5b4ee8);
     color: white;
-
     width: 65px;
-
     height: 65px;
-
     justify-self: center;
-
     border-radius: 50%;
-
-    box-shadow:
-        0 7px 18px rgba(92,80,230,.3);
+    box-shadow: 0 7px 18px rgba(92,80,230,.3);
 }
 
-
 /* ==================================================
-   نافذة الخصوصية
+   النوافذ
 ================================================== */
 
 .privacy-overlay,
 .admin-message-overlay {
-
     display: none;
-
     position: fixed;
-
     inset: 0;
-
     background: rgba(0,0,0,.55);
-
     z-index: 9999;
-
     align-items: center;
-
     justify-content: center;
-
     padding: 20px;
 }
 
-
 .privacy-box,
 .admin-message-box {
-
     width: 100%;
-
     max-width: 430px;
-
     background: white;
-
     border-radius: 22px;
-
     padding: 28px;
-
     text-align: center;
-
-    box-shadow:
-        0 15px 40px rgba(0,0,0,.25);
+    box-shadow: 0 15px 40px rgba(0,0,0,.25);
 }
 
-
 .privacy-icon {
-
     font-size: 50px;
-
     margin-bottom: 10px;
 }
 
-
 .privacy-box h2,
 .admin-message-box h2 {
-
     margin: 0 0 14px;
 }
 
-
 .privacy-box p,
 .admin-message-box p {
-
     color: #555;
-
     line-height: 1.8;
-
     margin-bottom: 22px;
 }
 
-
 .privacy-buttons {
-
     display: flex;
-
     flex-direction: column;
-
     gap: 10px;
 }
 
-
 .privacy-buttons button {
-
     width: 100%;
-
     border: none;
-
     padding: 13px;
-
     border-radius: 10px;
-
     font-size: 15px;
-
     cursor: pointer;
 }
 
-
 .make-public-btn {
-
     background: #2563eb;
-
     color: white;
 }
 
-
 .change-name-btn {
-
     background: #eef2ff;
-
     color: #2563eb;
 }
 
-
 .cancel-privacy-btn {
-
     background: #eeeeee;
-
     color: #333;
 }
 
-
 .admin-close-btn {
-
     width: 100%;
-
     border: none;
-
     padding: 13px;
-
     border-radius: 12px;
-
     background: #2563eb;
-
     color: white;
-
     font-size: 16px;
-
     cursor: pointer;
 }
-
 
 /* ==================================================
    الجوال
@@ -991,611 +676,602 @@ button {
 @media (max-width: 420px) {
 
     .app-page {
-
         padding-left: 14px;
         padding-right: 14px;
     }
 
     .learning-banner {
-
         min-height: 180px;
-
         padding: 22px;
     }
 
     .learning-banner h1 {
-
         font-size: 24px;
     }
 
     .books-decoration {
-
         font-size: 62px;
-
         left: 5px;
     }
 
     .main-card-new {
-
         padding: 13px;
-
         gap: 8px;
     }
 
     .main-card-new .icon {
-
         width: 46px;
         height: 46px;
-
         font-size: 24px;
     }
 
     .main-card-new h3 {
-
         font-size: 14px;
     }
 
     .main-card-new p {
-
         font-size: 10px;
+    }
+
+    .header-actions {
+        gap: 5px;
+    }
+
+    .header-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 19px;
     }
 
 }
 
-
-/* ==================================================
-   الجوال الصغير
-================================================== */
-
 @media (max-width: 360px) {
 
     .main-grid {
-
         gap: 8px;
     }
 
     .main-card-new {
-
         padding: 10px;
-
         min-height: 95px;
-
         gap: 7px;
     }
 
     .main-card-new .icon {
-
         width: 42px;
         height: 42px;
-
         font-size: 21px;
     }
 
     .main-card-new h3 {
-
         font-size: 13px;
     }
 
     .main-card-new p {
-
         font-size: 9px;
     }
 
 }
 
-
 </style>
 
 </head>
 
-
 <body>
-
 
 <main class="app-page">
 
+<!-- ==================================================
+     الهيدر
+================================================== -->
 
-    <!-- ==========================================
-         الهيدر
-    ========================================== -->
+<header class="new-header">
 
-    <header class="new-header">
+    <div class="user-area">
 
-        <div class="user-area">
+        <div
+            class="avatar-new"
+            id="userAvatar">
 
-            <div
-                class="avatar-new"
-                id="userAvatar">
-
-                ?
-
-            </div>
-
-            <div class="user-info">
-
-                <strong id="welcomeText">
-                    مرحباً 👋
-                </strong>
-
-                <small>
-                    جاهز لتعلم شيء جديد اليوم؟
-                </small>
-
-            </div>
+            ?
 
         </div>
 
-<div class="header-actions">
+        <div class="user-info">
 
-    <!-- الإشعارات -->
-
-    <button
-        class="header-icon"
-        onclick="showAdminMessageAgain()">
-
-        🔔
-
-        <span
-            id="notificationNumber"
-            class="notification-number"
-            style="display:none">
-
-            1
-
-        </span>
-
-    </button>
-
-
-    <!-- البروفايل -->
-
-    <button
-        class="header-icon"
-        onclick="window.location.href='profile.html'">
-
-        👤
-
-    </button>
-
-
-    <!-- الأدمن -->
-
-    <button
-        class="header-icon"
-        onclick="window.location.href='admin.html'">
-
-        ⚙️
-
-    </button>
-
-
-    <!-- تسجيل الخروج -->
-
-    <button
-        class="header-icon"
-        onclick="logout()">
-
-        🚪
-
-    </button>
-
-</div>
-
-        </div>
-
-    </header>
-
-
-
-    <!-- ==========================================
-         بانر ابدأ التعلم
-    ========================================== -->
-
-    <section class="learning-banner">
-
-        <h1>
-            ابدأ التعلم 📚
-        </h1>
-
-        <p>
-            تعلم كلمات جديدة
-            <br>
-            وطوّر مستواك في الإنجليزية
-        </p>
-
-        <button
-            class="start-learning-btn"
-            onclick="startLearning()">
-
-            ابدأ الآن
-            ←
-
-        </button>
-
-        <div class="books-decoration">
-            📚
-        </div>
-
-    </section>
-
-
-
-    <!-- ==========================================
-         تقدمك اليوم
-    ========================================== -->
-
-    <div class="section-title">
-
-        <h2>
-            تقدمك اليوم
-        </h2>
-
-        <button
-            onclick="window.location.href='progress.html'">
-
-            عرض التفاصيل
-
-        </button>
-
-    </div>
-
-
-    <section class="progress-card">
-
-
-        <div class="stat">
-
-            <div class="stat-icon">
-                🔥
-            </div>
-
-            <span
-                id="streakNumber"
-                class="stat-number">
-
-                0
-
-            </span>
-
-            <span class="stat-label">
-                يوم متتالي
-            </span>
-
-        </div>
-
-
-        <div class="stat">
-
-            <div class="stat-icon">
-                📖
-            </div>
-
-            <span
-                id="learnedNumber"
-                class="stat-number">
-
-                0
-
-            </span>
-
-            <span class="stat-label">
-                كلمة متعلمة
-            </span>
-
-        </div>
-
-
-        <div class="stat">
-
-            <div class="stat-icon">
-                📈
-            </div>
-
-            <span
-                id="progressNumber"
-                class="stat-number">
-
-                0%
-
-            </span>
-
-            <span class="stat-label">
-                نسبة التقدم
-            </span>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- ==========================================
-         تحدي اليوم
-    ========================================== -->
-
-    <div class="section-title">
-
-        <h2>
-            🔥 تحدي اليوم
-        </h2>
-
-    </div>
-
-
-    <section class="challenge-card">
-
-
-        <div class="challenge-icon">
-            🎯
-        </div>
-
-
-        <div class="challenge-content">
-
-            <strong>
-                تعلم 15 كلمة جديدة اليوم
-            </strong>
-
-
-            <div class="challenge-progress">
-
-                <div
-                    id="challengeFill"
-                    class="challenge-fill">
-
-                </div>
-
-            </div>
-
-
-            <div
-                id="challengeCount"
-                class="challenge-count">
-
-                0 / 15
-
-            </div>
-
-        </div>
-
-
-        <div style="font-size:35px;">
-            🎁
-        </div>
-
-
-    </section>
-
-
-
-    <!-- ==========================================
-         الأقسام الرئيسية
-    ========================================== -->
-
-    <div class="section-title">
-
-        <h2>
-            الأقسام الرئيسية
-        </h2>
-
-    </div>
-
-
-    <section class="main-grid">
-
-
-        <!-- التعلم -->
-
-        <button
-            class="main-card-new card-learning"
-            onclick="startLearning()">
-
-            <div class="icon">
-                📚
-            </div>
-
-            <div>
-
-                <h3>
-                    التعلم
-                </h3>
-
-                <p>
-                    تعلم كلمات جديدة
-                </p>
-
-            </div>
-
-        </button>
-
-
-
-        <!-- الاختبار -->
-
-        <button
-            class="main-card-new card-quiz"
-            onclick="window.location.href='quiz.html'">
-
-            <div class="icon">
-                🏆
-            </div>
-
-            <div>
-
-                <h3>
-                    الاختبار
-                </h3>
-
-                <p>
-                    اختبر مستواك
-                </p>
-
-            </div>
-
-        </button>
-
-
-
-        <!-- المراجعة -->
-
-        <button
-            class="main-card-new card-review"
-            onclick="window.location.href='review.html'">
-
-            <div class="icon">
-                🧠
-            </div>
-
-            <div>
-
-                <h3>
-                    المراجعة
-                </h3>
-
-                <p>
-                    راجع الكلمات المحفوظة
-                </p>
-
-            </div>
-
-        </button>
-
-
-
-        <!-- الدردشة -->
-
-        <button
-            class="main-card-new card-chat"
-            onclick="openChat()">
-
-            <div class="icon">
-                💬
-            </div>
-
-            <div>
-
-                <h3>
-                    الدردشة
-                </h3>
-
-                <p>
-                    تحدث مع المستخدمين
-                </p>
-
-            </div>
-
-        </button>
-
-
-
-        <!-- القراءة -->
-
-        <button
-            class="main-card-new card-reading"
-            onclick="window.location.href='reading.html'">
-
-            <div class="icon">
-                📖
-            </div>
-
-            <div>
-
-                <h3>
-                    القراءة
-                </h3>
-
-                <p>
-                    اقرأ نصوصًا وقصصًا بالإنجليزية
-                </p>
-
-            </div>
-
-        </button>
-
-
-
-            <!-- الذكاء الاصطناعي -->
-
-        <button
-          class="main-card-new card-ai"
-             onclick="window.location.href='ai-chat.html'">
-
-             <div class="icon">
-                🤖
-              </div>
-
-         <div>
-
-             <h3>
-                    تحدث مع AI
-                </h3>
-
-                <p>
-            تدرب على الإنجليزية
-                </p>
-
-              </div>
-
-            </button>
-
-
-
-
-
-
-
-
-
-    </section>
-
-
-
-    <!-- ==========================================
-         الكلمات المحفوظة
-    ========================================== -->
-
-    <div class="section-title">
-
-        <h2>
-            كلماتك المحفوظة
-        </h2>
-
-
-        <button
-            onclick="window.location.href='favorites.html'">
-
-            عرض الكل
-
-        </button>
-
-    </div>
-
-
-    <div
-        id="savedWords"
-        class="saved-list">
-
-        <div class="saved-word">
-
-            <div class="saved-image">
-                ⭐
-            </div>
-
-            <strong>
-                لا توجد
+            <strong id="welcomeText">
+                مرحباً 👋
             </strong>
 
             <small>
-                كلمات بعد
+                جاهز لتعلم شيء جديد اليوم؟
             </small>
 
         </div>
 
     </div>
 
+    <div class="header-actions">
+
+        <button
+            class="header-icon"
+            onclick="showAdminMessageAgain()">
+
+            🔔
+
+            <span
+                id="notificationNumber"
+                class="notification-number"
+                style="display:none">
+
+                1
+
+            </span>
+
+        </button>
+
+        <button
+            class="header-icon"
+            onclick="window.location.href='profile.html'">
+
+            👤
+
+        </button>
+
+        <button
+            class="header-icon"
+            onclick="window.location.href='admin.html'">
+
+            ⚙️
+
+        </button>
+
+        <button
+            class="header-icon"
+            onclick="logout()">
+
+            🚪
+
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- ==================================================
+     بانر التعلم
+================================================== -->
+
+<section class="learning-banner">
+
+    <h1>
+        ابدأ التعلم 📚
+    </h1>
+
+    <p>
+        تعلم كلمات جديدة
+        <br>
+        وطوّر مستواك في الإنجليزية
+    </p>
+
+    <button
+        class="start-learning-btn"
+        onclick="startLearning()">
+
+        ابدأ الآن
+        ←
+
+    </button>
+
+    <div class="books-decoration">
+        📚
+    </div>
+
+</section>
+
+
+<!-- ==================================================
+     تقدمك اليوم
+================================================== -->
+
+<div class="section-title">
+
+    <h2>
+        تقدمك اليوم
+    </h2>
+
+    <button
+        onclick="window.location.href='progress.html'">
+
+        عرض التفاصيل
+
+    </button>
+
+</div>
+
+
+<section class="progress-card">
+
+    <div class="stat">
+
+        <div class="stat-icon">
+            🔥
+        </div>
+
+        <span
+            id="streakNumber"
+            class="stat-number">
+
+            0
+
+        </span>
+
+        <span class="stat-label">
+            يوم متتالي
+        </span>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div class="stat-icon">
+            📖
+        </div>
+
+        <span
+            id="learnedNumber"
+            class="stat-number">
+
+            0
+
+        </span>
+
+        <span class="stat-label">
+            كلمة متعلمة
+        </span>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div class="stat-icon">
+            📈
+        </div>
+
+        <span
+            id="progressNumber"
+            class="stat-number">
+
+            0%
+
+        </span>
+
+        <span class="stat-label">
+            نسبة التقدم
+        </span>
+
+    </div>
+
+</section>
+
+
+<!-- ==================================================
+     تحدي اليوم
+================================================== -->
+
+<div class="section-title">
+
+    <h2>
+        🔥 تحدي اليوم
+    </h2>
+
+</div>
+
+
+<section class="challenge-card">
+
+    <div class="challenge-icon">
+        🎯
+    </div>
+
+    <div class="challenge-content">
+
+        <strong>
+            تعلم 15 كلمة جديدة اليوم
+        </strong>
+
+        <div class="challenge-progress">
+
+            <div
+                id="challengeFill"
+                class="challenge-fill">
+            </div>
+
+        </div>
+
+        <div
+            id="challengeCount"
+            class="challenge-count">
+
+            0 / 15
+
+        </div>
+
+    </div>
+
+    <div style="font-size:35px;">
+        🎁
+    </div>
+
+</section>
+
+
+<!-- ==================================================
+     🎧 اسمع واختر
+================================================== -->
+
+<div class="section-title">
+
+    <h2>
+        🎧 تدريب الاستماع
+    </h2>
+
+</div>
+
+
+<button
+    class="listen-page-card"
+    onclick="window.location.href='listen.html'">
+
+    <div class="listen-page-icon">
+        🎧
+    </div>
+
+    <div class="listen-page-content">
+
+        <strong>
+            اسمع واختر
+        </strong>
+
+        <span>
+            استمع للكلمة واختر معناها الصحيح
+        </span>
+
+    </div>
+
+    <div class="listen-page-arrow">
+        ←
+    </div>
+
+</button>
+
+
+<!-- ==================================================
+     الأقسام الرئيسية
+================================================== -->
+
+<div class="section-title">
+
+    <h2>
+        الأقسام الرئيسية
+    </h2>
+
+</div>
+
+
+<section class="main-grid">
+
+
+    <button
+        class="main-card-new card-learning"
+        onclick="startLearning()">
+
+        <div class="icon">
+            📚
+        </div>
+
+        <div>
+
+            <h3>
+                التعلم
+            </h3>
+
+            <p>
+                تعلم كلمات جديدة
+            </p>
+
+        </div>
+
+    </button>
+
+
+    <button
+        class="main-card-new card-quiz"
+        onclick="window.location.href='quiz.html'">
+
+        <div class="icon">
+            🏆
+        </div>
+
+        <div>
+
+            <h3>
+                الاختبار
+            </h3>
+
+            <p>
+                اختبر مستواك
+            </p>
+
+        </div>
+
+    </button>
+
+
+    <button
+        class="main-card-new card-review"
+        onclick="window.location.href='review.html'">
+
+        <div class="icon">
+            🧠
+        </div>
+
+        <div>
+
+            <h3>
+                المراجعة
+            </h3>
+
+            <p>
+                راجع الكلمات المحفوظة
+            </p>
+
+        </div>
+
+    </button>
+
+
+    <button
+        class="main-card-new card-chat"
+        onclick="openChat()">
+
+        <div class="icon">
+            💬
+        </div>
+
+        <div>
+
+            <h3>
+                الدردشة
+            </h3>
+
+            <p>
+                تحدث مع المستخدمين
+            </p>
+
+        </div>
+
+    </button>
+
+
+    <button
+        class="main-card-new card-reading"
+        onclick="window.location.href='reading.html'">
+
+        <div class="icon">
+            📖
+        </div>
+
+        <div>
+
+            <h3>
+                القراءة
+            </h3>
+
+            <p>
+                اقرأ نصوصًا وقصصًا بالإنجليزية
+            </p>
+
+        </div>
+
+    </button>
+
+
+<button
+    class="main-card-new card-games"
+    onclick="window.location.href='games.html'">
+
+    <div class="icon">
+        🎮
+    </div>
+
+    <div>
+
+        <h3>
+            الألعاب
+        </h3>
+
+        <p>
+            تعلم والعب مع الآخرين
+        </p>
+
+    </div>
+
+</button>
+
+
+
+    <button
+        class="main-card-new card-ai"
+        onclick="window.location.href='ai-chat.html'">
+
+        <div class="icon">
+            🤖
+        </div>
+
+        <div>
+
+            <h3>
+                تحدث مع AI
+            </h3>
+
+            <p>
+                تدرب على الإنجليزية
+            </p>
+
+        </div>
+
+    </button>
+
+</section>
+
+
+<!-- ==================================================
+     الكلمات المحفوظة
+================================================== -->
+
+<div class="section-title">
+
+    <h2>
+        كلماتك المحفوظة
+    </h2>
+
+    <button
+        onclick="window.location.href='favorites.html'">
+
+        عرض الكل
+
+    </button>
+
+</div>
+
+
+<div
+    id="savedWords"
+    class="saved-list">
+
+    <div class="saved-word">
+
+        <div class="saved-image">
+            ⭐
+        </div>
+
+        <strong>
+            لا توجد
+        </strong>
+
+        <small>
+            كلمات بعد
+        </small>
+
+    </div>
+
+</div>
 
 </main>
-
 
 
 <!-- ==================================================
@@ -1604,9 +1280,7 @@ button {
 
 <nav class="bottom-nav">
 
-
-    <button
-        onclick="startLearning()">
+    <button onclick="startLearning()">
 
         📖
 
@@ -1617,8 +1291,7 @@ button {
     </button>
 
 
-    <button
-        onclick="window.location.href='review.html'">
+    <button onclick="window.location.href='review.html'">
 
         🔄
 
@@ -1645,8 +1318,7 @@ button {
     </button>
 
 
-    <button
-        onclick="window.location.href='favorites.html'">
+    <button onclick="window.location.href='favorites.html'">
 
         🔖
 
@@ -1657,8 +1329,7 @@ button {
     </button>
 
 
-    <button
-        onclick="window.location.href='profile.html'">
+    <button onclick="window.location.href='profile.html'">
 
         ⋯
 
@@ -1668,9 +1339,7 @@ button {
 
     </button>
 
-
 </nav>
-
 
 
 <!-- ==================================================
@@ -1681,19 +1350,15 @@ button {
     class="privacy-overlay"
     id="privacyOverlay">
 
-
     <div class="privacy-box">
-
 
         <div class="privacy-icon">
             🔒
         </div>
 
-
         <h2>
             حسابك خاص
         </h2>
-
 
         <p>
 
@@ -1721,7 +1386,6 @@ button {
 
         <div class="privacy-buttons">
 
-
             <button
                 class="make-public-btn"
                 onclick="goToPublicProfile()">
@@ -1748,15 +1412,11 @@ button {
 
             </button>
 
-
         </div>
-
 
     </div>
 
-
 </div>
-
 
 
 <!-- ==================================================
@@ -1767,26 +1427,20 @@ button {
     class="admin-message-overlay"
     id="adminMessageOverlay">
 
-
     <div class="admin-message-box">
-
 
         <div style="font-size:48px;margin-bottom:10px;">
             📢
         </div>
 
-
         <h2 id="adminMessageTitle">
             رسالة جديدة
         </h2>
 
-
         <p
             id="adminMessageText"
             style="white-space:pre-wrap;">
-
         </p>
-
 
         <button
             class="admin-close-btn"
@@ -1796,12 +1450,9 @@ button {
 
         </button>
 
-
     </div>
 
-
 </div>
-
 
 
 <script src="script.js"></script>
@@ -1814,7 +1465,6 @@ button {
 ================================================== */
 
 let currentUser = null;
-
 let currentAdminMessage = null;
 
 
@@ -1875,16 +1525,9 @@ async function recordHomePageVisit() {
         data: visit,
         error
     } = await supabaseClient
-
         .from("home_page_visits")
-
         .select("visit_count")
-
-        .eq(
-            "user_id",
-            currentUser.id
-        )
-
+        .eq("user_id", currentUser.id)
         .maybeSingle();
 
 
@@ -1909,9 +1552,7 @@ async function recordHomePageVisit() {
     if (visit) {
 
         await supabaseClient
-
             .from("home_page_visits")
-
             .update({
 
                 username: username,
@@ -1923,7 +1564,6 @@ async function recordHomePageVisit() {
                     new Date().toISOString()
 
             })
-
             .eq(
                 "user_id",
                 currentUser.id
@@ -1932,9 +1572,7 @@ async function recordHomePageVisit() {
     } else {
 
         await supabaseClient
-
             .from("home_page_visits")
-
             .insert({
 
                 user_id:
@@ -1957,7 +1595,7 @@ async function recordHomePageVisit() {
 
 
 /* ==================================================
-   تسجيل النشاط اليومي وحساب الأيام المتتالية
+   تسجيل النشاط اليومي
 ================================================== */
 
 async function recordDailyActivity() {
@@ -1986,6 +1624,10 @@ async function recordDailyActivity() {
 }
 
 
+/* ==================================================
+   تحميل الأيام المتتالية
+================================================== */
+
 async function loadStreak() {
 
     if (!currentUser) return;
@@ -1995,16 +1637,9 @@ async function loadStreak() {
         data,
         error
     } = await supabaseClient
-
         .from("user_daily_activity")
-
         .select("activity_date")
-
-        .eq(
-            "user_id",
-            currentUser.id
-        )
-
+        .eq("user_id", currentUser.id)
         .order(
             "activity_date",
             {
@@ -2083,6 +1718,7 @@ async function loadStreak() {
 
             streak++;
 
+
             checkDate.setDate(
                 checkDate.getDate() - 1
             );
@@ -2113,20 +1749,15 @@ async function loadStatistics() {
     if (!currentUser) return;
 
 
-    /* الكلمات المتعلمة */
-
     const {
         count: learnedCount,
         error: learnedError
     } = await supabaseClient
-
         .from("learned_words")
-
         .select("*", {
             count: "exact",
             head: true
         })
-
         .eq(
             "user_id",
             currentUser.id
@@ -2143,15 +1774,11 @@ async function loadStatistics() {
     }
 
 
-    /* إجمالي الكلمات */
-
     const {
         count: totalCount,
         error: totalError
     } = await supabaseClient
-
         .from("words")
-
         .select("*", {
             count: "exact",
             head: true
@@ -2162,6 +1789,7 @@ async function loadStatistics() {
 
         const learned =
             learnedCount || 0;
+
 
         const percentage =
             Math.min(
@@ -2180,10 +1808,9 @@ async function loadStatistics() {
     }
 
 
-    /* كلمات اليوم */
-
     const today =
         new Date();
+
 
     today.setHours(
         0,
@@ -2197,19 +1824,15 @@ async function loadStatistics() {
         count: todayCount,
         error: todayError
     } = await supabaseClient
-
         .from("learned_words")
-
         .select("*", {
             count: "exact",
             head: true
         })
-
         .eq(
             "user_id",
             currentUser.id
         )
-
         .gte(
             "created_at",
             today.toISOString()
@@ -2243,8 +1866,6 @@ async function loadStatistics() {
     }
 
 
-    /* الأيام المتتالية */
-
     await recordDailyActivity();
 
     await loadStreak();
@@ -2265,9 +1886,7 @@ async function loadSavedWords() {
         data,
         error
     } = await supabaseClient
-
         .from("favorites")
-
         .select(`
             id,
             word_id,
@@ -2277,12 +1896,10 @@ async function loadSavedWords() {
                 image
             )
         `)
-
         .eq(
             "user_id",
             currentUser.id
         )
-
         .limit(10);
 
 
@@ -2360,7 +1977,7 @@ async function loadSavedWords() {
             imageHTML = `
 
                 <img
-                    src="${word.image}"
+                    src="${escapeHtml(word.image)}"
                     alt=""
                 >
 
@@ -2411,33 +2028,26 @@ async function loadAdminMessage() {
         data,
         error
     } = await supabaseClient
-
         .from("admin_messages")
-
         .select("*")
-
         .eq(
             "is_active",
             true
         )
-
         .lte(
             "starts_at",
             now
         )
-
         .gt(
             "ends_at",
             now
         )
-
         .order(
             "created_at",
             {
                 ascending: false
             }
         )
-
         .limit(1);
 
 
@@ -2454,9 +2064,7 @@ async function loadAdminMessage() {
 
 
     if (!data || data.length === 0) {
-
         return;
-
     }
 
 
@@ -2569,16 +2177,12 @@ async function openChat() {
         data: profile,
         error
     } = await supabaseClient
-
         .from("profiles")
-
         .select("is_public")
-
         .eq(
             "id",
             currentUser.id
         )
-
         .maybeSingle();
 
 
@@ -2586,9 +2190,11 @@ async function openChat() {
 
         console.error(error);
 
+
         alert(
             "حدث خطأ، حاول مرة أخرى."
         );
+
 
         return;
 
@@ -2604,6 +2210,7 @@ async function openChat() {
             "privacyOverlay"
         ).style.display =
             "flex";
+
 
         return;
 
@@ -2683,8 +2290,10 @@ function escapeHtml(text) {
     const div =
         document.createElement("div");
 
+
     div.textContent =
         text || "";
+
 
     return div.innerHTML;
 
@@ -2698,6 +2307,7 @@ function escapeHtml(text) {
 async function startHomePage() {
 
     await loadUser();
+
 
     if (!currentUser) return;
 
@@ -2713,16 +2323,28 @@ async function startHomePage() {
 }
 
 
+/*
+    ملاحظة:
+    لا يوجد هنا:
+
+    await loadListenWords();
+
+    لأن اسمع واختر أصبح في listen.html.
+*/
+
+
 startHomePage();
 
 </script>
 
 
-<script src="supabase.js"></script>
 <script src="notifications.js"></script>
+   
 
+<script>
+startPresence("home");
+</script>
 
 
 </body>
 </html>
-
