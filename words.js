@@ -35,17 +35,7 @@ async function loadWords() {
 
     // لازم يكون مسجل دخول
 
-    if (userError || !user) {
-
-        alert(
-            "⚠️ يجب تسجيل الدخول أولاً."
-        );
-
-        window.location.href =
-            "login.html";
-
-        return;
-    }
+   // الزائر يستطيع التعلم بدون تسجيل دخول
 
 
     // ==========================================
@@ -748,21 +738,13 @@ async function answer(known) {
             .getUser();
 
 
-    if (
-        userError ||
-        !user
-    ) {
+   if (userError || !user) {
 
-        alert(
-            "⚠️ يجب تسجيل الدخول أولاً."
-        );
+    nextWord();
 
-        window.location.href =
-            "login.html";
+    return;
 
-        return;
-
-    }
+}
 
 
 
@@ -968,21 +950,17 @@ async function toggleFavorite() {
             .getUser();
 
 
-    if (
-        userError ||
-        !user
-    ) {
+   if (userError || !user) {
 
-        alert(
-            "⚠️ يجب تسجيل الدخول أولاً."
-        );
+    if (confirm("لحفظ الكلمات في المفضلة يجب تسجيل الدخول.\n\nهل تريد تسجيل الدخول الآن؟")) {
 
-        window.location.href =
-            "login.html";
-
-        return;
+        window.location.href = "login.html";
 
     }
+
+    return;
+
+}
 
 
     const word =
