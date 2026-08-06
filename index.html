@@ -1171,7 +1171,7 @@ button {
 
 <button
     class="main-card-new card-games"
-    onclick="window.location.href='games.html'">
+    onclick="openGames()">
 
     <div class="icon">
         🎮
@@ -1193,9 +1193,9 @@ button {
 
 
 
-    <button
-        class="main-card-new card-ai"
-        onclick="window.location.href='ai-chat.html'">
+   <button
+    class="main-card-new card-ai"
+    onclick="openAI()">
 
         <div class="icon">
             🤖
@@ -1493,6 +1493,14 @@ button {
                 لاحقًا
 
             </button>
+
+    <button
+        class="cancel-privacy-btn"
+        onclick="closeLoginPopup()">
+
+        إلغاء
+
+    </button>
 
         </div>
 
@@ -2385,7 +2393,38 @@ function escapeHtml(text) {
 
 }
 
+/* ==================================================
+   حماية الألعاب و AI
+================================================== */
 
+function openGames() {
+
+    if (!currentUser) {
+
+        showLoginPopup();
+
+        return;
+
+    }
+
+    window.location.href = "games.html";
+
+}
+
+
+function openAI() {
+
+    if (!currentUser) {
+
+        showLoginPopup();
+
+        return;
+
+    }
+
+    window.location.href = "ai-chat.html";
+
+}
 /* ==================================================
    تشغيل الصفحة
 ================================================== */

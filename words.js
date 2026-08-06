@@ -731,18 +731,15 @@ async function answer(known) {
     // إذا لم يكن المستخدم مسجل دخول
     // ==========================================
 
-    if (!currentUser) {
+   if (!currentUser) {
 
-        alert(
-            "🔒 سجل الدخول لحفظ تقدمك، يمكنك التعلم بدون حساب."
-        );
+    alert(
+        "🔒 سجل الدخول لحفظ تقدمك."
+    );
 
-        window.location.href =
-            "login.html";
+    return;
 
-        return;
-
-    }
+}
 
 
     if (
