@@ -608,9 +608,7 @@
             >
 
         </div>
-<select
-    id="imageSizeFilter"
-    onchange="sortWordsByImageSize()"
+<select id="imageSizeFilter">
 >
 
     <option value="">
@@ -1738,6 +1736,102 @@
 <script src="categories.js"></script>
 
 <script src="admin.js"></script>
+
+<script>
+window.sortWordsByImageSize = function () {
+
+    const filter =
+        document.getElementById("imageSizeFilter");
+
+    const wordsList =
+        document.getElementById("wordsList");
+
+    if (!filter || !wordsList) {
+        return;
+    }
+
+    const items =
+        Array.from(wordsList.children);
+
+    items.sort(function (a, b) {
+
+        const aSizeElement =
+            a.querySelector(".image-size");
+
+        const bSizeElement =
+            b.querySelector(".image-size");
+
+        const aText =
+            aSizeElement
+                ? aSizeElement.textContent
+                : "";
+
+        const bText =
+            bSizeElement
+                ? bSizeElement.textContent
+                : "";
+
+        function convertToBytes(text) {
+
+            const match =
+                text.match(
+                    /([\d.,]+)\s*(B|KB|MB|GB)/i
+                );
+
+            if (!match) return 0;
+
+            const number =
+                parseFloat(
+                    match[1].replace(",", ".")
+                );
+
+            const unit =
+                match[2].toUpperCase();
+
+            if (unit === "GB")
+                return number * 1024 * 1024 * 1024;
+
+            if (unit === "MB")
+                return number * 1024 * 1024;
+
+            if (unit === "KB")
+                return number * 1024;
+
+            return number;
+        }
+
+        const aSize =
+            convertToBytes(aText);
+
+        const bSize =
+            convertToBytes(bText);
+
+        if (filter.value === "largest") {
+            return bSize - aSize;
+        }
+
+        if (filter.value === "smallest") {
+            return aSize - bSize;
+        }
+
+        return 0;
+    });
+
+    items.forEach(function (item) {
+        wordsList.appendChild(item);
+    });
+};
+
+document
+    .getElementById("imageSizeFilter")
+    ?.addEventListener(
+        "change",
+        window.sortWordsByImageSize
+    );
+
+</script>
+
+<script src="notifications.js"></script>
 
 <script src="notifications.js"></script>
 
