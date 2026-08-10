@@ -1697,10 +1697,12 @@ async function applyImageSizeFilter() {
 // ==========================================
 
 function filterByImageSize() {
-
     applyImageSizeFilter();
-
 }
+
+// ==========================================
+// 🖼️ الترتيب حسب حجم الصورة
+// ==========================================
 
 
 // ==========================================
@@ -1775,7 +1777,7 @@ async function deleteWord(id) {
     await loadWords();
 
 }
-```
+
 
 
 
@@ -4958,59 +4960,7 @@ document.addEventListener(
 // ترتيب الكلمات حسب حجم الصورة
 // ==========================================
 
-async function sortWordsByImageSize() {
 
-    const filter =
-        document.getElementById("imageSizeFilter");
-
-    if (!filter) return;
-
-    const value =
-        filter.value;
-
-    // بدون فلترة
-    if (!value) {
-        renderWords();
-        return;
-    }
-
-    // إظهار رسالة تحميل
-    const wordsList =
-        document.getElementById("wordsList");
-
-    if (wordsList) {
-
-        wordsList.innerHTML = `
-            <div class="word-item">
-                ⏳ جاري حساب أحجام الصور...
-            </div>
-        `;
-
-    }
-
-    // حساب أحجام جميع الصور
-    await Promise.all(
-
-        words.map(async word => {
-
-            if (!word.image) {
-
-                imageSizes[word.id] = 0;
-
-                return;
-            }
-
-            const size =
-                await getImageSizeFromUrl(
-                    word.image
-                );
-
-            imageSizes[word.id] =
-                Number(size) || 0;
-
-        })
-
-    );
 
     // ترتيب
     const sortedWords =
