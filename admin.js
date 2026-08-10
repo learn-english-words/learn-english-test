@@ -4966,3 +4966,122 @@ document.addEventListener(
 // ترتيب الكلمات حسب حجم الصورة
 // ==========================================
 
+
+// ==========================================
+// 🖼️ ترتيب الكلمات حسب حجم الصورة
+// ==========================================
+
+window.sortWordsByImageSize = async function () {
+
+    const filter =
+        document.getElementById(
+            "imageSizeFilter"
+        );
+
+    if (!filter) {
+        console.error(
+            "❌ لم يتم العثور على imageSizeFilter"
+        );
+        return;
+    }
+
+    const value =
+        filter.value;
+
+    if (!value) {
+        renderWords();
+        return;
+    }
+
+    const wordsList =
+        document.getElementById(
+            "wordsList"
+        );
+
+    if (wordsList) {
+
+        wordsList.innerHTML = `
+            <div class="word-item">
+                ⏳ جاري حساب أحجام الصور وترتيب الكلمات...
+            </div>
+        `;
+
+    }
+
+    await Promise.all(
+
+        words.map(async word => {
+
+            // الكلمة بدون صورة
+            if (!word.image) {
+
+                imageSizes[word.id] =
+                    null;
+
+                return;
+            }
+
+            const size =
+                await getImageSizeFromUrl(
+                    word.image
+                );
+
+            imageSizes[word.id] =
+                size;
+
+        })
+
+    );
+
+
+    const sortedWords =
+        [...words].sort(
+            (a, b) => {
+
+                const sizeA =
+                    Number(
+                        imageSizes[a.id] || 0
+                    );
+
+                const sizeB =
+                    Number(
+                        imageSizes[b.id] || 0
+                    );
+
+
+                if (
+                    value === "largest"
+                ) {
+
+                    return (
+                        sizeB -
+                        sizeA
+                    );
+
+                }
+
+
+                if (
+                    value === "smallest"
+                ) {
+
+                    return (
+                        sizeA -
+                        sizeB
+                    );
+
+                }
+
+
+                return 0;
+
+            }
+        );
+
+
+    renderWords(
+        sortedWords
+    );
+
+};
+
