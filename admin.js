@@ -1305,27 +1305,59 @@ function renderWords(
                 );
 
 
-            const imageSize =
-                imageSizes[word.id];
+const imageSize =
+    imageSizes[word.id];
 
 
-            let imageSizeText =
-                "🖼️ جاري حساب الحجم...";
+// ==========================================
+// تحديد حالة الصورة
+// ==========================================
+
+let imageSizeText;
 
 
-            if (
-                imageSize !==
-                undefined
-            ) {
+// 🚫 لا توجد صورة أصلًا
+if (!word.image) {
 
-                imageSizeText =
-                    imageSize !== null
-                        ? `🖼️ ${formatImageSize(
-                            imageSize
-                        )}`
-                        : "🖼️ الحجم غير متاح";
+    imageSizeText =
+        "🖼️ لا توجد صورة";
 
-            }
+}
+
+
+// ⏳ توجد صورة ولم يتم حساب حجمها بعد
+else if (
+    imageSize === undefined
+) {
+
+    imageSizeText =
+        "🖼️ جاري حساب الحجم...";
+
+}
+
+
+// ❌ توجد صورة لكن تعذر معرفة حجمها
+else if (
+    imageSize === null
+) {
+
+    imageSizeText =
+        "🖼️ الحجم غير متاح";
+
+}
+
+
+// ✅ تم حساب الحجم
+else {
+
+    imageSizeText =
+        `🖼️ ${formatImageSize(
+            imageSize
+        )}`;
+
+}
+
+
 
 
             item.innerHTML = `
