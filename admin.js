@@ -4953,3 +4953,95 @@ document.addEventListener(
     }
 );
 
+
+// ==========================================
+// ترتيب الكلمات حسب حجم الصورة
+// ==========================================
+
+async function sortWordsByImageSize() {
+
+    const filter =
+        document.getElementById("imageSizeFilter");
+
+    if (!filter) return;
+
+    const value =
+        filter.value;
+
+    // بدون فلترة
+    if (!value) {
+        renderWords();
+        return;
+    }
+
+    // إظهار رسالة تحميل
+    const wordsList =
+        document.getElementById("wordsList");
+
+    if (wordsList) {
+
+        wordsList.innerHTML = `
+            <div class="word-item">
+                ⏳ جاري حساب أحجام الصور...
+            </div>
+        `;
+
+    }
+
+    // حساب أحجام جميع الصور
+    await Promise.all(
+
+        words.map(async word => {
+
+            if (!word.image) {
+
+                imageSizes[word.id] = 0;
+
+                return;
+            }
+
+            const size =
+                await getImageSizeFromUrl(
+                    word.image
+                );
+
+            imageSizes[word.id] =
+                Number(size) || 0;
+
+        })
+
+    );
+
+    // ترتيب
+    const sortedWords =
+        [...words].sort(
+            (a, b) => {
+
+                const sizeA =
+                    Number(
+                        imageSizes[a.id] || 0
+                    );
+
+                const sizeB =
+                    Number(
+                        imageSizes[b.id] || 0
+                    );
+
+                // الأكبر ← الأصغر
+                if (value === "largest") {
+                    return sizeB - sizeA;
+                }
+
+                // الأصغر ← الأكبر
+                if (value === "smallest") {
+                    return sizeA - sizeB;
+                }
+
+                return 0;
+            }
+        );
+
+    // عرض النتيجة
+    renderWords(sortedWords);
+}
+
