@@ -1477,6 +1477,9 @@ function renderWords(
 }
 
 
+
+
+
 // ==========================================
 // 🔎 البحث
 // ==========================================
@@ -1490,20 +1493,18 @@ function searchWords() {
 
     if (!input) return;
 
-
     const search =
         input.value
             .toLowerCase()
             .trim();
 
-
+    // إذا البحث فارغ
     if (!search) {
 
         applyImageSizeFilter();
 
         return;
     }
-
 
     const filtered =
         words.filter(
@@ -1541,15 +1542,12 @@ function searchWords() {
             }
         );
 
-
-    renderWords(
-        filtered
-    );
+    renderWords(filtered);
 }
 
 
 // ==========================================
-// 📊 تصفية حسب حجم الصورة
+// 📊 تصفية وترتيب حسب حجم الصورة
 // ==========================================
 
 async function applyImageSizeFilter() {
@@ -1559,7 +1557,6 @@ async function applyImageSizeFilter() {
             "imageSizeFilter"
         );
 
-
     if (!filter) {
 
         renderWords();
@@ -1567,12 +1564,10 @@ async function applyImageSizeFilter() {
         return;
     }
 
-
     const value =
         filter.value;
 
-
-    // إذا لم يتم اختيار تصفية
+    // الوضع الطبيعي
     if (!value) {
 
         renderWords();
@@ -1603,7 +1598,7 @@ async function applyImageSizeFilter() {
 
 
     // ==========================================
-    // حساب أحجام جميع الصور أولًا
+    // حساب أحجام الصور
     // ==========================================
 
     await Promise.all(
@@ -1611,10 +1606,11 @@ async function applyImageSizeFilter() {
         words.map(
             async word => {
 
+                // الكلمة بدون صورة
                 if (!word.image) {
 
                     imageSizes[word.id] =
-                        0;
+                        null;
 
                     return;
                 }
@@ -1627,7 +1623,7 @@ async function applyImageSizeFilter() {
 
 
                 imageSizes[word.id] =
-                    size || 0;
+                    size;
 
             }
         )
@@ -1648,15 +1644,16 @@ async function applyImageSizeFilter() {
                         imageSizes[a.id] || 0
                     );
 
+
                 const sizeB =
                     Number(
                         imageSizes[b.id] || 0
                     );
 
 
+                // الأكبر ← الأصغر
                 if (
-                    value ===
-                    "largest"
+                    value === "largest"
                 ) {
 
                     return (
@@ -1667,9 +1664,9 @@ async function applyImageSizeFilter() {
                 }
 
 
+                // الأصغر ← الأكبر
                 if (
-                    value ===
-                    "smallest"
+                    value === "smallest"
                 ) {
 
                     return (
@@ -1689,6 +1686,7 @@ async function applyImageSizeFilter() {
     renderWords(
         sortedWords
     );
+
 }
 
 
@@ -1697,17 +1695,25 @@ async function applyImageSizeFilter() {
 // ==========================================
 
 function filterByImageSize() {
+
     applyImageSizeFilter();
+
 }
+
 
 // ==========================================
 // 🖼️ الترتيب حسب حجم الصورة
 // ==========================================
 
+async function sortWordsByImageSize() {
 
-// ==========================================
-// 🗑️ حذف كلمة
-// ==========================================
+    await applyImageSizeFilter();
+
+}
+
+
+
+
 
 async function deleteWord(id) {
 
@@ -4959,39 +4965,4 @@ document.addEventListener(
 // ==========================================
 // ترتيب الكلمات حسب حجم الصورة
 // ==========================================
-
-
-
-    // ترتيب
-    const sortedWords =
-        [...words].sort(
-            (a, b) => {
-
-                const sizeA =
-                    Number(
-                        imageSizes[a.id] || 0
-                    );
-
-                const sizeB =
-                    Number(
-                        imageSizes[b.id] || 0
-                    );
-
-                // الأكبر ← الأصغر
-                if (value === "largest") {
-                    return sizeB - sizeA;
-                }
-
-                // الأصغر ← الأكبر
-                if (value === "smallest") {
-                    return sizeA - sizeB;
-                }
-
-                return 0;
-            }
-        );
-
-    // عرض النتيجة
-    renderWords(sortedWords);
-}
 
